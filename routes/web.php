@@ -137,6 +137,12 @@ Route::middleware('auth')->group(function () {
         ]);
     });
 
+    Route::get('/utility', function () {
+        return view('utility', [
+            'title' => 'Utility Page'
+        ]);
+    });
+
     Route::post('/logout', function () {
         auth()->logout();
 
