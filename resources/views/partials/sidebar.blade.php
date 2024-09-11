@@ -63,6 +63,14 @@
               <span class="text nav-text">Cash Book</span>
             </a>
           </li>
+          
+          <!-- New Utility Tab -->
+          <li class="nav-link" id="utility-link">
+            <a href="/utility">
+              <i class='bx bx-wrench icon'></i>
+              <span class="text nav-text">Utility</span>
+            </a>
+          </li>
         </ul>
       </div>
       <div class="bottom-content">
