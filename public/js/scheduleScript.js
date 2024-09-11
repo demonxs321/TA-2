@@ -93,3 +93,117 @@ $("#monthSelect").change(function () {
 //         alert("Please enter the required details.");
 // }
 // });
+const projects = [
+    {
+        id: 1,
+        name: "Project 1: Website Development",
+        description:
+            "This project involves creating a responsive website using HTML, CSS, and JavaScript.",
+        details: [
+            {
+                person: "John Doe",
+                machine: "Machine A",
+                date: "2024-09-15",
+                task: "HTML & CSS Development",
+            },
+            {
+                person: "Jane Smith",
+                machine: "Machine B",
+                date: "2024-09-16",
+                task: "JavaScript Development",
+            },
+        ],
+    },
+    {
+        id: 2,
+        name: "Project 2: Mobile App Development",
+        description:
+            "This project focuses on developing a cross-platform mobile app for personal finance management.",
+        details: [
+            {
+                person: "Michael Johnson",
+                machine: "Machine C",
+                date: "2024-09-17",
+                task: "Frontend Development",
+            },
+            {
+                person: "Jane Smith",
+                machine: "Machine D",
+                date: "2024-09-18",
+                task: "Backend API Development",
+            },
+        ],
+    },
+    {
+        id: 3,
+        name: "Project 3: Data Analysis with Python",
+        description:
+            "This project involves analyzing large datasets using Python, Pandas, and Matplotlib.",
+        details: [
+            {
+                person: "John Doe",
+                machine: "Machine E",
+                date: "2024-09-19",
+                task: "Data Cleaning",
+            },
+            {
+                person: "Michael Johnson",
+                machine: "Machine F",
+                date: "2024-09-20",
+                task: "Data Visualization",
+            },
+        ],
+    },
+];
+
+function showProjectDescription() {
+    const dropdown = document.getElementById("projectDropdown");
+    const selectedValue = dropdown.value;
+
+    if (selectedValue === "") {
+        document.getElementById("description").classList.add("hidden");
+        return;
+    }
+
+    // Cari proyek yang sesuai dengan nilai yang dipilih dari dropdown
+    const selectedProject = projects.find(
+        (project) => project.id == selectedValue
+    );
+
+    // Jika proyek ditemukan, tampilkan data proyek, orang, mesin, tanggal, dan pekerjaan
+    if (selectedProject) {
+        document.getElementById("projectTitle").innerText =
+            selectedProject.name;
+        document.getElementById("projectDetails").innerText =
+            selectedProject.description;
+
+        // Kosongkan isi tabel sebelumnya
+        const tableBody = document.getElementById("tableBody");
+        tableBody.innerHTML = "";
+
+        // Loop untuk menampilkan data orang, mesin, tanggal, dan pekerjaan ke bawah
+        selectedProject.details.forEach((detail) => {
+            const row = document.createElement("tr");
+
+            const personCell = document.createElement("td");
+            const machineCell = document.createElement("td");
+            const dateCell = document.createElement("td");
+            const taskCell = document.createElement("td");
+
+            personCell.innerText = detail.person;
+            machineCell.innerText = detail.machine;
+            dateCell.innerText = detail.date;
+            taskCell.innerText = detail.task;
+
+            row.appendChild(personCell);
+            row.appendChild(machineCell);
+            row.appendChild(dateCell);
+            row.appendChild(taskCell);
+
+            tableBody.appendChild(row);
+        });
+
+        // Tampilkan deskripsi
+        document.getElementById("description").classList.remove("hidden");
+    }
+}
