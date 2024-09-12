@@ -1,6 +1,6 @@
-@extends('layouts/main')
 
-@section('container')
+
+<?php $__env->startSection('container'); ?>
 
 <div class="container-cs">
     <div class="top-bar">
@@ -111,4 +111,6 @@
 <script src="/js/utilityScript.js"></script>
 <!-- @Utility, end -->
 
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts/main', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\Users\RYZEN\OneDrive\Documents\GitHub\TA-2\resources\views/utility.blade.php ENDPATH**/ ?>
