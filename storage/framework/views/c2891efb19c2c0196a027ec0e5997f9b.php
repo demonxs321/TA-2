@@ -99,4 +99,4 @@
       </div>
     </div>
 </nav>
-<?php /**PATH C:\Users\RYZEN\OneDrive\Documents\GitHub\TA-2\resources\views/partials/sidebar.blade.php ENDPATH**/ ?>
+<?php /**PATH D:\laravel2.0\TA-2\resources\views/partials/sidebar.blade.php ENDPATH**/ ?>

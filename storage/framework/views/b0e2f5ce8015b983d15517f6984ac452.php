@@ -1,6 +1,6 @@
-@extends('layouts/main')
 
-@section('container')
+
+<?php $__env->startSection('container'); ?>
 
 <div class="container-sc">
     <div class="top-bar">
@@ -98,51 +98,14 @@
 </section>
 
 <!-- Modal -->
-{{-- <div class="modal fade" id="addEventModal" tabindex="-1" role="dialog" aria-labelledby="addEventModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addEventModalLabel">Add New Event</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form id="addEventForm">
-                    <div class="form-group">
-                        <label for="eventTitle">Event Title</label>
-                        <input type="text" class="form-control" id="eventTitle" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="eventStart">Start Date</label>
-                        <input type="text" class="form-control datepicker" id="eventStart" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="eventEnd">End Date</label>
-                        <input type="text" class="form-control datepicker" id="eventEnd">
-                    </div>
-                    <div class="form-group">
-                        <label for="eventColor">Event Color</label>
-                        <input type="color" class="form-control" id="eventColor" value="#ff9f89">
-                    </div>
-                    <div class="form-group">
-                        <label for="eventTextColor">Text Color</label>
-                        <input type="color" class="form-control" id="eventTextColor" value="#000000">
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" onclick="revertModal()" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="saveEventButton">Save Event</button>
-            </div>
-        </div>
-    </div>
-</div> --}}
+
 
 
 <script src="/js/scheduleScript.js"></script>
 
 
 
-@endsection
+<?php $__env->stopSection(); ?>
 
+
+<?php echo $__env->make('layouts/main', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\laravel2.0\TA-2\resources\views/schedule.blade.php ENDPATH**/ ?>
