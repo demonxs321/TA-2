@@ -38,6 +38,7 @@
       </div>
       <div class="modal-body">
       <div class="mb-4">
+        <div class="title">Ongoing Project</div>
             <select class="form-select" id="projectDropdown" onchange="showProjectDescription()">
                 <option value="">-- Select a Project --</option>
                 <option value="1">Project 1</option>

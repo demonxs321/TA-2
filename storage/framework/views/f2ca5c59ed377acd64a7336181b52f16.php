@@ -23,6 +23,60 @@
     <div class="timeline-header">
         <h2>Timeline</h2>
         <div>
+            <!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+  Project Description
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Project</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+      <div class="mb-4">
+        <div class="title">Ongoing Project</div>
+            <select class="form-select" id="projectDropdown" onchange="showProjectDescription()">
+                <option value="">-- Select a Project --</option>
+                <option value="1">Project 1</option>
+                <option value="2">Project 2</option>
+                <option value="3">Project 3</option>
+            </select>
+        </div>
+            <div id="description" class="card hidden">
+            <div class="card-body">
+                <h4 id="projectTitle" class="card-title"></h4>
+                <p id="projectDetails" class="card-text"></p>
+
+                <h5 class="mt-4">People, Machines, Dates, and Tasks Involved</h5>
+                <div class="table-responsive">
+                    <table class="table table-bordered mt-3">
+                        <thead class="table-dark">
+                            <tr>
+                                <th scope="col">People</th>
+                                <th scope="col">Machines</th>
+                                <th scope="col">Date</th>
+                                <th scope="col">Task</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            <!-- Rows will be dynamically inserted here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>    
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
             <a href="/project"><button class="btn btn-primary">Project View</button></a>
             <select class="btn btn-light" id="monthSelect">
                 <option value="0">January</option>
