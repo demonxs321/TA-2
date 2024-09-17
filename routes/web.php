@@ -19,6 +19,7 @@ use App\Http\Controllers\SellingItemController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\PurchaseTransactionController;
 use App\Http\Controllers\PurchaseItemController;
+use App\Http\Controllers\ReportController;
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\GoogleController;
@@ -124,6 +125,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/purchase', [PurchaseController::class, 'index']);
     Route::get('/purchase/transaction', [PurchaseTransactionController::class, 'index']);
     Route::get('/purchase/item', [PurchaseItemController::class, 'index']);
+    Route::post('/reports', [ReportController::class, 'store']);
+    Route::get('/reports', [ReportController::class, 'index']);
 
     Route::get('/cash', function () {
         return view('cash', [

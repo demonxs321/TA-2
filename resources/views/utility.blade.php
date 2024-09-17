@@ -5,18 +5,17 @@
 <div class="container-cs">
     <div class="top-bar">
         <div class="header-wrapper">
-        <div class="header-title">
-            <h2>Utility Page</h2>
-        </div>
-        <div class="dropdown-top">
-        </div>
-        <div class="user-info">
-            <img src="image2.jpg" alt="">
-        </div>
+            <div class="header-title">
+                <h2>Utility Page</h2>
+            </div>
+            <div class="dropdown-top"></div>
+            <div class="user-info">
+                <img src="image2.jpg" alt="">
+            </div>
         </div>
     </div>  
 
-<!-- @Utility, start -->
+    <!-- @Utility, start -->
     <div class="row row-cols-2 row-cols-md-2 g-3">
         <div class="col">
             <h3>Machine</h3>
@@ -62,27 +61,28 @@
             <h3>Report</h3>
             <div class="container">
                 <form id="reportForm">
-                <div class="mb-3">
-                    <label for="Name">Name</label>
-                    <input type="text" class="form-control" id="Name" required>
-                </div>
-                <div class="mb-3">
-                    <label for="tanggal">Date</label>
-                    <input type="date" class="form-control" id="date" required>
-                </div>
-                <div class="mb-3">
-                    <label for="project">ID Project</label>
-                    <input type="text" class="form-control" id="idProject" required>
-                </div>
-                <div class="mb-3">
-                    <label for="product">Product</label>
-                    <input type="text" class="form-control" id="product" required>
-                </div>
-                <div class="mb-3">
-                    <label for="deskripsi">Description</label>
-                    <textarea class="form-control" id="description" rows="2" required></textarea>
-                </div>    
-                <button type="submit" id="submit" class="btn btn-primary">Submit</button>
+                    @csrf
+                    <div class="mb-3">
+                        <label for="Name">Name</label>
+                        <input type="text" class="form-control" id="Name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="tanggal">Date</label>
+                        <input type="date" class="form-control" id="date" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="project">ID Project</label>
+                        <input type="text" class="form-control" id="idProject" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="product">Product</label>
+                        <input type="text" class="form-control" id="product" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="deskripsi">Description</label>
+                        <textarea class="form-control" id="description" rows="2" required></textarea>
+                    </div>    
+                    <button type="submit" id="submit" class="btn btn-primary">Submit</button>
                 </form>
             </div>
         </div>
@@ -92,7 +92,7 @@
                 <table class="table table-responsive table-striped">
                     <thead>
                         <tr>
-                        <th scope="col">#</th>
+                            <th scope="col">#</th>
                             <th scope="col">Name</th>
                             <th scope="col">Date</th>
                             <th scope="col">ID Project</th>
@@ -101,14 +101,14 @@
                         </tr>
                     </thead>
                     <tbody id="reportTableBody">
-
+                        <!-- Data dari AJAX akan dimasukkan di sini -->
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 
-<script src="/js/utilityScript.js"></script>
-<!-- @Utility, end -->
+    <script src="/js/utilityScript.js"></script>
+    <!-- @Utility, end -->
 
 @endsection

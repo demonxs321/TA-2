@@ -1,31 +1,69 @@
-let reportCounter = 1; // Untuk nomor urut laporan
+$(document).ready(function() {
+  // Saat form submit
+  $('#reportForm').on('submit', function(e) {
+      e.preventDefault();
 
-document.getElementById("reportForm").addEventListener("submit", function (e) {
-    e.preventDefault();
+      // Ambil data dari form
+      let formData = {
+          name: $('#Name').val(),
+          date: $('#date').val(),
+          id_project: $('#idProject').val(),
+          product: $('#product').val(),
+          description: $('#description').val(),
+          _token: $('input[name="_token"]').val()
+      };
 
-    const Name = document.getElementById("Name").value;
-    const date = document.getElementById("date").value;
-    const idProject = document.getElementById("idProject").value;
-    const product = document.getElementById("product").value;
-    const description = document.getElementById("description").value;
+      // Kirim data dengan AJAX
+      $.ajax({
+          url: '/reports',
+          type: 'POST',
+          data: formData,
+          success: function(response) {
+              // Tambahkan data baru ke table tanpa reload halaman
+              let newRow = `
+                  <tr>
+                      <td>${response.id}</td>
+                      <td>${response.name}</td>
+                      <td>${response.date}</td>
+                      <td>${response.id_project}</td>
+                      <td>${response.product}</td>
+                      <td>${response.description}</td>
+                  </tr>
+              `;
+              $('#reportTableBody').append(newRow);
 
-    // Tambahkan data ke dalam tabel
-    const tableBody = document.getElementById("reportTableBody");
-    const newRow = document.createElement("tr");
+              // Reset form setelah submit
+              $('#reportForm')[0].reset();
+          },
+          error: function(xhr) {
+              alert('Gagal menyimpan data.');
+          }
+      });
+  });
 
-    newRow.innerHTML = `
-        <th scope="row">${reportCounter}</th>
-        <td>${Name}</td>
-        <td>${date}</td>
-        <td>${idProject}</td>
-        <td>${product}</td>
-        <td>${description}</td>
-      `;
+  // Load data ke table saat halaman pertama kali di-load
+  function loadReports() {
+      $.ajax({
+          url: '/reports',
+          type: 'GET',
+          success: function(reports) {
+              reports.forEach(report => {
+                  let newRow = `
+                      <tr>
+                          <td>${report.id}</td>
+                          <td>${report.name}</td>
+                          <td>${report.date}</td>
+                          <td>${report.id_project}</td>
+                          <td>${report.product}</td>
+                          <td>${report.description}</td>
+                      </tr>
+                  `;
+                  $('#reportTableBody').append(newRow);
+              });
+          }
+      });
+  }
 
-    tableBody.appendChild(newRow);
-
-    reportCounter++; // Tambahkan nomor urut
-
-    // Reset form setelah submit
-    document.getElementById("reportForm").reset();
+  // Panggil fungsi untuk load data report
+  loadReports();
 });
