@@ -37,36 +37,56 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-      <div class="mb-4">
-            <select class="form-select" id="projectDropdown" onchange="showProjectDescription()">
-                <option value="">-- Select a Project --</option>
-                <option value="1">Project 1</option>
-                <option value="2">Project 2</option>
-                <option value="3">Project 3</option>
-            </select>
+        <div class="mb-4">
+          <div class="title">Ongoing Project</div>
+          <select class="form-select" id="projectDropdown" onchange="showProjectDescription()">
+            <option value="">-- Select a Project --</option>
+            <option value="1">Project 1</option>
+            <option value="2">Project 2</option>
+            <option value="3">Project 3</option>
+          </select>
         </div>
-            <div id="description" class="card hidden">
-            <div class="card-body">
-                <h4 id="projectTitle" class="card-title"></h4>
-                <p id="projectDetails" class="card-text"></p>
+        
+        <div id="description" class="card hidden">
+          <div class="card-body">
+            <h4 id="projectTitle" class="card-title"></h4>
+            <p id="projectDetails" class="card-text"></p>
+            
+            <h5 class="mt-4">Select Data to Display</h5>
+            <select class="form-select mb-3" id="dataSelector" onchange="showSelectedTable()">
+              <option value="employee">Employee Table</option>
+              <option value="machine">Machine Table</option>
+            </select>
 
-                <h5 class="mt-4">People, Machines, Dates, and Tasks Involved</h5>
-                <div class="table-responsive">
-                    <table class="table table-bordered mt-3">
-                        <thead class="table-dark">
-                            <tr>
-                                <th scope="col">People</th>
-                                <th scope="col">Machines</th>
-                                <th scope="col">Date</th>
-                                <th scope="col">Task</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tableBody">
-                            <!-- Rows will be dynamically inserted here -->
-                        </tbody>
-                    </table>
-                </div>
+            <h5 class="mt-4" id="tableHeader">People, Dates, and Tasks Involved</h5>
+            <div class="table-responsive">
+              <table class="table table-bordered mt-3" id="employeeTable">
+                <thead class="table-dark">
+                  <tr>
+                    <th scope="col">People</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Task</th>
+                  </tr>
+                </thead>
+                <tbody id="employeeTableBody">
+                  <!-- Rows for Employee Table will be dynamically inserted here -->
+                </tbody>
+              </table>
+              
+              <table class="table table-bordered mt-3 hidden" id="machineTable">
+                <thead class="table-dark">
+                  <tr>
+                    <th scope="col">Machine</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Task</th>
+                  </tr>
+                </thead>
+                <tbody id="machineTableBody">
+                  <!-- Rows for Machine Table will be dynamically inserted here -->
+                </tbody>
+              </table>
             </div>
+          </div>
         </div>    
       </div>
       <div class="modal-footer">
@@ -76,6 +96,7 @@
     </div>
   </div>
 </div>
+
             <a href="/project"><button class="btn btn-primary">Project View</button></a>
             <select class="btn btn-light" id="monthSelect">
                 <option value="0">January</option>

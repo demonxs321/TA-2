@@ -165,45 +165,80 @@ function showProjectDescription() {
         return;
     }
 
-    // Cari proyek yang sesuai dengan nilai yang dipilih dari dropdown
+    // Find the selected project
     const selectedProject = projects.find(
         (project) => project.id == selectedValue
     );
 
-    // Jika proyek ditemukan, tampilkan data proyek, orang, mesin, tanggal, dan pekerjaan
     if (selectedProject) {
         document.getElementById("projectTitle").innerText =
             selectedProject.name;
         document.getElementById("projectDetails").innerText =
             selectedProject.description;
 
-        // Kosongkan isi tabel sebelumnya
-        const tableBody = document.getElementById("tableBody");
-        tableBody.innerHTML = "";
+        // Clear both tables' content before adding new rows
+        document.getElementById("employeeTableBody").innerHTML = "";
+        document.getElementById("machineTableBody").innerHTML = "";
 
-        // Loop untuk menampilkan data orang, mesin, tanggal, dan pekerjaan ke bawah
+        // Populate the Employee Table
         selectedProject.details.forEach((detail) => {
-            const row = document.createElement("tr");
+            const employeeRow = document.createElement("tr");
 
             const personCell = document.createElement("td");
-            const machineCell = document.createElement("td");
             const dateCell = document.createElement("td");
             const taskCell = document.createElement("td");
 
             personCell.innerText = detail.person;
+            dateCell.innerText = detail.date;
+            taskCell.innerText = detail.task;
+
+            employeeRow.appendChild(personCell);
+            employeeRow.appendChild(dateCell);
+            employeeRow.appendChild(taskCell);
+
+            document
+                .getElementById("employeeTableBody")
+                .appendChild(employeeRow);
+        });
+
+        // Populate the Machine Table
+        selectedProject.details.forEach((detail) => {
+            const machineRow = document.createElement("tr");
+
+            const machineCell = document.createElement("td");
+            const dateCell = document.createElement("td");
+            const taskCell = document.createElement("td");
+
             machineCell.innerText = detail.machine;
             dateCell.innerText = detail.date;
             taskCell.innerText = detail.task;
 
-            row.appendChild(personCell);
-            row.appendChild(machineCell);
-            row.appendChild(dateCell);
-            row.appendChild(taskCell);
+            machineRow.appendChild(machineCell);
+            machineRow.appendChild(dateCell);
+            machineRow.appendChild(taskCell);
 
-            tableBody.appendChild(row);
+            document.getElementById("machineTableBody").appendChild(machineRow);
         });
 
-        // Tampilkan deskripsi
+        // Show the description card
         document.getElementById("description").classList.remove("hidden");
+
+        // Show only the selected table
+        showSelectedTable();
+    }
+}
+
+function showSelectedTable() {
+    const selectedTable = document.getElementById("dataSelector").value;
+    const employeeTable = document.getElementById("employeeTable");
+    const machineTable = document.getElementById("machineTable");
+
+    // Show/hide the tables based on the selected value
+    if (selectedTable === "employee") {
+        employeeTable.classList.remove("hidden");
+        machineTable.classList.add("hidden");
+    } else if (selectedTable === "machine") {
+        employeeTable.classList.add("hidden");
+        machineTable.classList.remove("hidden");
     }
 }

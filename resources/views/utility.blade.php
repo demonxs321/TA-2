@@ -27,7 +27,6 @@
                             <th scope="col">Machine</th>
                             <th scope="col">Date</th>
                             <th scope="col">Task</th>
-                            <th scope="col">Operator</th>
                         </tr>
                     </thead>
                     <tbody>
