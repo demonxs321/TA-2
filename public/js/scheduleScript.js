@@ -93,6 +93,9 @@ $("#monthSelect").change(function () {
 //         alert("Please enter the required details.");
 // }
 // });
+// Array of projects
+// Sample data for projects
+// Sample project data
 const projects = [
     {
         id: 1,
@@ -156,6 +159,10 @@ const projects = [
     },
 ];
 
+// Global variable to track the currently selected project and edited row
+let currentEditRow = null;
+
+// Function to show the selected project's description and data
 function showProjectDescription() {
     const dropdown = document.getElementById("projectDropdown");
     const selectedValue = dropdown.value;
@@ -176,51 +183,37 @@ function showProjectDescription() {
         document.getElementById("projectDetails").innerText =
             selectedProject.description;
 
-        // Clear both tables' content before adding new rows
+        // Clear previous table content
         document.getElementById("employeeTableBody").innerHTML = "";
         document.getElementById("machineTableBody").innerHTML = "";
 
         // Populate the Employee Table
-        selectedProject.details.forEach((detail) => {
+        selectedProject.details.forEach((detail, index) => {
             const employeeRow = document.createElement("tr");
 
-            const personCell = document.createElement("td");
-            const dateCell = document.createElement("td");
-            const taskCell = document.createElement("td");
-
-            personCell.innerText = detail.person;
-            dateCell.innerText = detail.date;
-            taskCell.innerText = detail.task;
-
-            employeeRow.appendChild(personCell);
-            employeeRow.appendChild(dateCell);
-            employeeRow.appendChild(taskCell);
-
+            employeeRow.innerHTML = `
+                <td>${detail.person}</td>
+                <td>${detail.date}</td>
+                <td>${detail.task}</td>
+                <td><button class="btn btn-sm btn-primary" onclick="openEditForm(this, 'employee', ${index})">Edit</button></td>
+            `;
             document
                 .getElementById("employeeTableBody")
                 .appendChild(employeeRow);
-        });
 
-        // Populate the Machine Table
-        selectedProject.details.forEach((detail) => {
+            // Populate the Machine Table
             const machineRow = document.createElement("tr");
 
-            const machineCell = document.createElement("td");
-            const dateCell = document.createElement("td");
-            const taskCell = document.createElement("td");
-
-            machineCell.innerText = detail.machine;
-            dateCell.innerText = detail.date;
-            taskCell.innerText = detail.task;
-
-            machineRow.appendChild(machineCell);
-            machineRow.appendChild(dateCell);
-            machineRow.appendChild(taskCell);
-
+            machineRow.innerHTML = `
+                <td>${detail.machine}</td>
+                <td>${detail.date}</td>
+                <td>${detail.task}</td>
+                <td><button class="btn btn-sm btn-primary" onclick="openEditForm(this, 'machine', ${index})">Edit</button></td>
+            `;
             document.getElementById("machineTableBody").appendChild(machineRow);
         });
 
-        // Show the description card
+        // Display the description card
         document.getElementById("description").classList.remove("hidden");
 
         // Show only the selected table
@@ -228,12 +221,12 @@ function showProjectDescription() {
     }
 }
 
+// Function to show only the selected table (Employee or Machine)
 function showSelectedTable() {
     const selectedTable = document.getElementById("dataSelector").value;
     const employeeTable = document.getElementById("employeeTable");
     const machineTable = document.getElementById("machineTable");
 
-    // Show/hide the tables based on the selected value
     if (selectedTable === "employee") {
         employeeTable.classList.remove("hidden");
         machineTable.classList.add("hidden");
@@ -241,4 +234,148 @@ function showSelectedTable() {
         employeeTable.classList.add("hidden");
         machineTable.classList.remove("hidden");
     }
+}
+
+// Show the Add Row form
+function showAddRowForm() {
+    document.getElementById("addRowFormContainer").classList.remove("hidden");
+}
+
+// Function to add a new row to the currently displayed table
+function addRow() {
+    const personMachine = document.getElementById("newPersonMachine").value;
+    const date = document.getElementById("newDate").value;
+    const task = document.getElementById("newTask").value;
+
+    if (personMachine === "" || date === "" || task === "") {
+        alert("Please fill out all fields.");
+        return;
+    }
+
+    const selectedTable = document.getElementById("dataSelector").value;
+    const projectId = document.getElementById("projectDropdown").value;
+    const selectedProject = projects.find((project) => project.id == projectId);
+
+    if (selectedProject) {
+        const newDetail =
+            selectedTable === "employee"
+                ? { person: personMachine, date: date, task: task }
+                : { machine: personMachine, date: date, task: task };
+
+        selectedProject.details.push(newDetail);
+
+        // Re-render the table to reflect the new row
+        showProjectDescription();
+    }
+
+    // Clear the form fields and hide the form
+    document.getElementById("newPersonMachine").value = "";
+    document.getElementById("newDate").value = "";
+    document.getElementById("newTask").value = "";
+    document.getElementById("addRowFormContainer").classList.add("hidden");
+}
+
+// Cancel adding a new row
+function cancelAddRow() {
+    document.getElementById("addRowFormContainer").classList.add("hidden");
+    document.getElementById("newPersonMachine").value = "";
+    document.getElementById("newDate").value = "";
+    document.getElementById("newTask").value = "";
+}
+
+// Function to save the changes to the project array
+function saveChanges() {
+    const selectedProjectId = document.getElementById("projectDropdown").value;
+    const selectedProject = projects.find(
+        (project) => project.id == selectedProjectId
+    );
+
+    if (selectedProject) {
+        alert("Changes have been saved successfully!");
+    } else {
+        alert("Please select a project first.");
+    }
+}
+
+// Function to open the edit form with the data from the selected row
+function openEditForm(button, tableType, rowIndex) {
+    currentEditRow = { rowIndex, tableType }; // Store the row index and table type being edited
+
+    // Find the row being edited
+    const row = button.closest("tr");
+    const cells = row.getElementsByTagName("td");
+
+    // Populate the edit form fields with the current row's data
+    document.getElementById("editPersonMachine").value = cells[0].innerText;
+    document.getElementById("editDate").value = cells[1].innerText;
+    document.getElementById("editTask").value = cells[2].innerText;
+
+    // Show the edit form container
+    document.getElementById("editFormContainer").classList.remove("hidden");
+}
+
+// Save the changes made in the edit form
+function saveEdit() {
+    const editPersonMachine =
+        document.getElementById("editPersonMachine").value;
+    const editDate = document.getElementById("editDate").value;
+    const editTask = document.getElementById("editTask").value;
+
+    // Ensure all fields have been filled
+    if (!editPersonMachine || !editDate || !editTask) {
+        alert("Please fill out all fields before saving.");
+        return;
+    }
+
+    // Find the row to be updated
+    if (currentEditRow) {
+        const tableBody =
+            currentEditRow.tableType === "employee"
+                ? document.getElementById("employeeTableBody")
+                : document.getElementById("machineTableBody");
+
+        const row = tableBody.children[currentEditRow.rowIndex];
+        const cells = row.getElementsByTagName("td");
+
+        // Update the row in the DOM with the new values
+        cells[0].innerText = editPersonMachine;
+        cells[1].innerText = editDate;
+        cells[2].innerText = editTask;
+
+        // Update the data in the projects array
+        const projectId = document.getElementById("projectDropdown").value;
+        const selectedProject = projects.find(
+            (project) => project.id == projectId
+        );
+
+        if (selectedProject) {
+            const detailIndex = currentEditRow.rowIndex;
+            if (currentEditRow.tableType === "employee") {
+                selectedProject.details[detailIndex].person = editPersonMachine;
+                selectedProject.details[detailIndex].date = editDate;
+                selectedProject.details[detailIndex].task = editTask;
+            } else if (currentEditRow.tableType === "machine") {
+                selectedProject.details[detailIndex].machine =
+                    editPersonMachine;
+                selectedProject.details[detailIndex].date = editDate;
+                selectedProject.details[detailIndex].task = editTask;
+            }
+        }
+
+        // Clear and hide the edit form
+        document.getElementById("editFormContainer").classList.add("hidden");
+        document.getElementById("editPersonMachine").value = "";
+        document.getElementById("editDate").value = "";
+        document.getElementById("editTask").value = "";
+
+        // Alert success
+        alert("Changes have been saved successfully!");
+    }
+}
+// Cancel editing and hide the edit form
+function cancelEdit() {
+    document.getElementById("editFormContainer").classList.add("hidden");
+    document.getElementById("editPersonMachine").value = "";
+    document.getElementById("editDate").value = "";
+    document.getElementById("editTask").value = "";
 }
