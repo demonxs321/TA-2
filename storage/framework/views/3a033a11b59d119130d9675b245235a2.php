@@ -95,12 +95,15 @@
                         </div>
 
                         <!-- Edit Form Container (Initially Hidden) -->
+<!-- Edit Form Container (Initially Hidden) -->
 <div id="editFormContainer" class="hidden mt-4">
     <h5>Edit Row</h5>
     <form id="editForm">
         <div class="mb-3">
             <label for="editPersonMachine" class="form-label">Person/Machine</label>
-            <input type="text" class="form-control" id="editPersonMachine">
+            <select class="form-select" id="editPersonMachine">
+                <!-- Options will be dynamically inserted here -->
+            </select>
         </div>
         <div class="mb-3">
             <label for="editDate" class="form-label">Date</label>
@@ -116,29 +119,34 @@
 </div>
 
 
+
                         <!-- Button to show the add row form -->
                         <button class="btn btn-success mt-3" onclick="showAddRowForm()">Add Row</button>
 
                         <!-- Add Row Form (Initially Hidden) -->
-                        <div id="addRowFormContainer" class="hidden mt-4">
-                            <h5>Add New Row</h5>
-                            <form id="addRowForm">
-                                <div class="mb-3">
-                                    <label for="newPersonMachine" class="form-label">Person/Machine</label>
-                                    <input type="text" class="form-control" id="newPersonMachine">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="newDate" class="form-label">Date</label>
-                                    <input type="date" class="form-control" id="newDate">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="newTask" class="form-label">Task</label>
-                                    <input type="text" class="form-control" id="newTask">
-                                </div>
-                                <button type="button" class="btn btn-primary" onclick="addRow()">Add</button>
-                                <button type="button" class="btn btn-secondary" onclick="cancelAddRow()">Cancel</button>
-                            </form>
-                        </div>
+                        <!-- Add Row Form (Initially Hidden) -->
+<div id="addRowFormContainer" class="hidden mt-4">
+    <h5>Add New Row</h5>
+    <form id="addRowForm">
+        <div class="mb-3">
+            <label for="newPersonMachine" class="form-label">Person/Machine</label>
+            <select class="form-select" id="newPersonMachine">
+                <!-- Options will be dynamically inserted here -->
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="newDate" class="form-label">Date</label>
+            <input type="date" class="form-control" id="newDate">
+        </div>
+        <div class="mb-3">
+            <label for="newTask" class="form-label">Task</label>
+            <input type="text" class="form-control" id="newTask">
+        </div>
+        <button type="button" class="btn btn-primary" onclick="addRow()">Add</button>
+        <button type="button" class="btn btn-secondary" onclick="cancelAddRow()">Cancel</button>
+    </form>
+</div>
+
                     </div>
                 </div>
             </div>

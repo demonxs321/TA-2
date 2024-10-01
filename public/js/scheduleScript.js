@@ -163,6 +163,7 @@ const projects = [
 let currentEditRow = null;
 
 // Function to show the selected project's description and data
+// Function to show the selected project's description and data
 function showProjectDescription() {
     const dropdown = document.getElementById("projectDropdown");
     const selectedValue = dropdown.value;
@@ -187,30 +188,36 @@ function showProjectDescription() {
         document.getElementById("employeeTableBody").innerHTML = "";
         document.getElementById("machineTableBody").innerHTML = "";
 
-        // Populate the Employee Table
+        // Populate the Employee Table with relevant details
         selectedProject.details.forEach((detail, index) => {
-            const employeeRow = document.createElement("tr");
+            if (detail.person) {
+                // Only add rows with a person entry to the employee table
+                const employeeRow = document.createElement("tr");
+                employeeRow.innerHTML = `
+                    <td>${detail.person}</td>
+                    <td>${detail.date}</td>
+                    <td>${detail.task}</td>
+                    <td><button class="btn btn-sm btn-primary" onclick="openEditForm(this, 'employee', ${index})">Edit</button></td>
+                `;
+                document
+                    .getElementById("employeeTableBody")
+                    .appendChild(employeeRow);
+            }
 
-            employeeRow.innerHTML = `
-                <td>${detail.person}</td>
-                <td>${detail.date}</td>
-                <td>${detail.task}</td>
-                <td><button class="btn btn-sm btn-primary" onclick="openEditForm(this, 'employee', ${index})">Edit</button></td>
-            `;
-            document
-                .getElementById("employeeTableBody")
-                .appendChild(employeeRow);
-
-            // Populate the Machine Table
-            const machineRow = document.createElement("tr");
-
-            machineRow.innerHTML = `
-                <td>${detail.machine}</td>
-                <td>${detail.date}</td>
-                <td>${detail.task}</td>
-                <td><button class="btn btn-sm btn-primary" onclick="openEditForm(this, 'machine', ${index})">Edit</button></td>
-            `;
-            document.getElementById("machineTableBody").appendChild(machineRow);
+            // Populate the Machine Table with relevant details
+            if (detail.machine) {
+                // Only add rows with a machine entry to the machine table
+                const machineRow = document.createElement("tr");
+                machineRow.innerHTML = `
+                    <td>${detail.machine}</td>
+                    <td>${detail.date}</td>
+                    <td>${detail.task}</td>
+                    <td><button class="btn btn-sm btn-primary" onclick="openEditForm(this, 'machine', ${index})">Edit</button></td>
+                `;
+                document
+                    .getElementById("machineTableBody")
+                    .appendChild(machineRow);
+            }
         });
 
         // Display the description card
@@ -234,6 +241,8 @@ function showSelectedTable() {
         employeeTable.classList.add("hidden");
         machineTable.classList.remove("hidden");
     }
+
+    populateDropdownOptions(); // Update dropdown options whenever table selection changes
 }
 
 // Show the Add Row form
@@ -241,6 +250,7 @@ function showAddRowForm() {
     document.getElementById("addRowFormContainer").classList.remove("hidden");
 }
 
+// Function to add a new row to the currently displayed table
 // Function to add a new row to the currently displayed table
 function addRow() {
     const personMachine = document.getElementById("newPersonMachine").value;
@@ -257,12 +267,22 @@ function addRow() {
     const selectedProject = projects.find((project) => project.id == projectId);
 
     if (selectedProject) {
-        const newDetail =
-            selectedTable === "employee"
-                ? { person: personMachine, date: date, task: task }
-                : { machine: personMachine, date: date, task: task };
-
-        selectedProject.details.push(newDetail);
+        // Determine which table is being added to and maintain separate structures for employee and machine
+        if (selectedTable === "employee") {
+            selectedProject.details.push({
+                person: personMachine,
+                date: date,
+                task: task,
+                machine: "", // Ensure machine field remains empty when adding to the employee table
+            });
+        } else if (selectedTable === "machine") {
+            selectedProject.details.push({
+                person: "", // Ensure person field remains empty when adding to the machine table
+                machine: personMachine,
+                date: date,
+                task: task,
+            });
+        }
 
         // Re-render the table to reflect the new row
         showProjectDescription();
@@ -378,4 +398,111 @@ function cancelEdit() {
     document.getElementById("editPersonMachine").value = "";
     document.getElementById("editDate").value = "";
     document.getElementById("editTask").value = "";
+}
+
+// Function to show the selected project's description and data
+function showProjectDescription() {
+    const dropdown = document.getElementById("projectDropdown");
+    const selectedValue = dropdown.value;
+
+    if (selectedValue === "") {
+        document.getElementById("description").classList.add("hidden");
+        populateDropdownOptions(); // Populate with dummy data
+        return;
+    }
+
+    const selectedProject = projects.find(
+        (project) => project.id == selectedValue
+    );
+
+    if (selectedProject) {
+        document.getElementById("projectTitle").innerText =
+            selectedProject.name;
+        document.getElementById("projectDetails").innerText =
+            selectedProject.description;
+
+        document.getElementById("employeeTableBody").innerHTML = "";
+        document.getElementById("machineTableBody").innerHTML = "";
+
+        selectedProject.details.forEach((detail, index) => {
+            if (detail.person) {
+                const employeeRow = document.createElement("tr");
+                employeeRow.innerHTML = `
+                    <td>${detail.person}</td>
+                    <td>${detail.date}</td>
+                    <td>${detail.task}</td>
+                    <td><button class="btn btn-sm btn-primary" onclick="openEditForm(this, 'employee', ${index})">Edit</button></td>
+                `;
+                document
+                    .getElementById("employeeTableBody")
+                    .appendChild(employeeRow);
+            }
+
+            if (detail.machine) {
+                const machineRow = document.createElement("tr");
+                machineRow.innerHTML = `
+                    <td>${detail.machine}</td>
+                    <td>${detail.date}</td>
+                    <td>${detail.task}</td>
+                    <td><button class="btn btn-sm btn-primary" onclick="openEditForm(this, 'machine', ${index})">Edit</button></td>
+                `;
+                document
+                    .getElementById("machineTableBody")
+                    .appendChild(machineRow);
+            }
+        });
+
+        document.getElementById("description").classList.remove("hidden");
+        showSelectedTable(); // Ensure the correct table is displayed
+        populateDropdownOptions(); // Populate dropdown with relevant data
+    }
+}
+
+// Function to populate dropdown options with dummy data for Person/Machine based on selected table
+function populateDropdownOptions() {
+    const selectedTable = document.getElementById("dataSelector").value; // Get the selected table type
+    const newPersonMachineSelect = document.getElementById("newPersonMachine");
+    const editPersonMachineSelect =
+        document.getElementById("editPersonMachine");
+
+    // Clear existing options
+    newPersonMachineSelect.innerHTML = "";
+    editPersonMachineSelect.innerHTML = "";
+
+    // Add a placeholder option
+    const placeholderOption = document.createElement("option");
+    placeholderOption.value = "";
+    placeholderOption.text = "-- Select an Option --";
+    newPersonMachineSelect.appendChild(placeholderOption);
+    editPersonMachineSelect.appendChild(placeholderOption.cloneNode(true));
+
+    // Dummy data for persons and machines
+    const dummyPersons = [
+        "Alice Johnson",
+        "Bob Smith",
+        "Charlie Brown",
+        "David Williams",
+    ];
+    const dummyMachines = ["Machine X", "Machine Y", "Machine Z", "Machine W"];
+
+    // Check which table is selected and populate accordingly
+    if (selectedTable === "employee") {
+        // Populate with dummy person data
+        dummyPersons.forEach((person) => {
+            const option = document.createElement("option");
+            option.value = person;
+            option.text = person;
+            newPersonMachineSelect.appendChild(option.cloneNode(true));
+            editPersonMachineSelect.appendChild(option.cloneNode(true));
+        });
+    } else if (selectedTable === "machine") {
+        // Populate with dummy machine data
+        dummyMachines.forEach((machine) => {
+            const option = document.createElement("option");
+            option.value = machine;
+            option.text = machine;
+            newPersonMachineSelect.appendChild(option.cloneNode(true));
+            editPersonMachineSelect.appendChild(option.cloneNode(true));
+        });
+    }
 }
