@@ -1,6 +1,6 @@
-@extends('layouts/main')
 
-@section('container')
+
+<?php $__env->startSection('container'); ?>
 
 <div class="container-cs">
     <div class="top-bar">
@@ -72,7 +72,7 @@
             <h3>Report</h3>
             <div class="container">
                 <form id="reportForm">
-                    @csrf
+                    <?php echo csrf_field(); ?>
                     <div class="mb-3">
                         <label for="Name">Name</label>
                         <input type="text" class="form-control" id="Name" required>
@@ -125,4 +125,6 @@
     <script src="/js/utilityScript.js"></script>
     <!-- @Utility, end -->
 
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts/main', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\Users\RYZEN\OneDrive\Documents\ta\TA-2 @AR2 20241016\resources\views/utility.blade.php ENDPATH**/ ?>

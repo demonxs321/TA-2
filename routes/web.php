@@ -20,6 +20,11 @@ use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\PurchaseTransactionController;
 use App\Http\Controllers\PurchaseItemController;
 use App\Http\Controllers\ReportController;
+// @AR2, start
+use App\Http\Controllers\ProjectMachineController;
+use App\Http\Controllers\ProjectWorkforceController;
+use App\Http\Controllers\ScheduleController;
+// @AR2, end
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\GoogleController;
@@ -127,6 +132,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/purchase/item', [PurchaseItemController::class, 'index']);
     Route::post('/reports', [ReportController::class, 'store']);
     Route::get('/reports', [ReportController::class, 'index']);
+    // @AR2, start
+    Route::get('/schedule', [ScheduleController::class, 'index']);
+    Route::get('/projectMachine', [ProjectMachineController::class, 'index']);
+    Route::get('/projectWorkforce', [ProjectWorkforceController::class, 'index']);
+    // @AR2, end
 
     Route::get('/cash', function () {
         return view('cash', [

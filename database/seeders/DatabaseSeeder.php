@@ -45,6 +45,10 @@ class DatabaseSeeder extends Seeder
             PurchaseItemSeeder::class,
 
             CalculatePriceSeeder::class,
+            // @AR2, start
+            ProjectMachineSeeder::class,
+            ProjectWorkforceSeeder::class,
+            // @AR2, end
 
             // Add more seeders here if needed
         ]);

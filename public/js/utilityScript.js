@@ -43,6 +43,8 @@ $(document).ready(function() {
 
   // Load data ke table saat halaman pertama kali di-load
   function loadReports() {
+    // @AR2, start
+    /*
       $.ajax({
           url: '/reports',
           type: 'GET',
@@ -62,8 +64,74 @@ $(document).ready(function() {
               });
           }
       });
+    */
+   var reports = $("#report-utility-table").DataTable({
+        ajax: {
+            url: '/reports',
+            type: 'GET',
+            dataSrc: function (json) {
+                console.log(json);
+                return json;
+            },
+        },
+        columns:[
+            { data: 'id' },
+            { data: 'name' },
+            { data: 'date' },
+            { data: 'id_project' },
+            { data: 'product' },
+            { data: 'description' },
+        ]
+    });
+    // @AR2, end
   }
+
+  // @AR2, start
+  function loadProjectMachines() {
+    var projectMachines = $("#machine-utility-table").DataTable({
+        ajax: {
+            url: '/projectMachine',
+            type: 'GET',
+            dataSrc: function (json) {
+                console.log(json);
+                return json;
+            },
+        },
+        columns:[
+            { data: 'id' },
+            { data: 'project.name' },
+            { data: 'machine.name' },
+            { data: 'date' },
+            { data: 'task' },
+        ]
+    });
+  }
+
+  function loadProjectWorkforces() {
+    var projectWorkforces = $("#employee-utility-table").DataTable({
+        ajax: {
+            url: '/projectWorkforce',
+            type: 'GET',
+            dataSrc: function (json) {
+                console.log(json);
+                return json;
+            },
+        },
+        columns:[
+            { data: 'id' },
+            { data: 'project.name' },
+            { data: 'workforce.name' },
+            { data: 'date' },
+            { data: 'task' },
+        ]
+    });
+  }
+  // @AR2, end
 
   // Panggil fungsi untuk load data report
   loadReports();
+  // @AR2, start
+  loadProjectMachines();
+  loadProjectWorkforces();
+  // @AR2, end
 });

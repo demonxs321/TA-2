@@ -76,9 +76,16 @@ Route::get('project/', [ProjectController::class, 'index']);
 Route::get('project/{id}', [ProjectController::class, 'show']);
 Route::delete('project/{id}', [ProjectController::class, 'destroy']);
 Route::put('project/{id}', [ProjectController::class, 'update']);
+// @AR2, start
+Route::get('project/workforce_machine/{id}', [ProjectController::class, 'showWorkforces_Machines']);
+// @AR2, end
 
 Route::put('project/{id}/updateProducts', [ProjectController::class, 'updateProjectProducts']);
 Route::post('project/createProjectProducts', [ProjectController::class, 'createProjectProducts']);
+// @AR2, start
+Route::put('project/{id}/updateProjectMachines', [ProjectController::class, 'updateProjectMachines']);
+Route::put('project/{id}/updateProjectWorkforces', [ProjectController::class, 'updateProjectWorkforces']);
+// @AR2, end
 
 // Route::post('schedule/', [ScheduleController::class, 'store']);
 // Route::get('schedule/', [ScheduleController::class, 'index']);

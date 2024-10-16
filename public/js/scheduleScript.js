@@ -1,3 +1,6 @@
+// @AR2, start
+let selectedProject_workforce_machine = null;
+// @AR2, end
 $(document).ready(function () {
     $("#calendar").fullCalendar({
         header: {
@@ -96,6 +99,8 @@ $("#monthSelect").change(function () {
 // Array of projects
 // Sample data for projects
 // Sample project data
+// @AR2, start
+/*
 const projects = [
     {
         id: 1,
@@ -158,12 +163,16 @@ const projects = [
         ],
     },
 ];
+*/
+// @AR2, end
 
 // Global variable to track the currently selected project and edited row
 let currentEditRow = null;
 
 // Function to show the selected project's description and data
 // Function to show the selected project's description and data
+// @AR2, start
+/*
 function showProjectDescription() {
     const dropdown = document.getElementById("projectDropdown");
     const selectedValue = dropdown.value;
@@ -227,22 +236,61 @@ function showProjectDescription() {
         showSelectedTable();
     }
 }
+*/
+// @AR2, end
 
 // Function to show only the selected table (Employee or Machine)
 function showSelectedTable() {
     const selectedTable = document.getElementById("dataSelector").value;
-    const employeeTable = document.getElementById("employeeTable");
-    const machineTable = document.getElementById("machineTable");
+    // @AR2, start
+    //const employeeTable = document.getElementById("employeeTable");
+    //const machineTable = document.getElementById("machineTable");
+    const employeeClassName = "employeeOnly";
+    const machineClassName = "machineOnly";
+    // @AR2, end
 
     if (selectedTable === "employee") {
-        employeeTable.classList.remove("hidden");
-        machineTable.classList.add("hidden");
-    } else if (selectedTable === "machine") {
-        employeeTable.classList.add("hidden");
-        machineTable.classList.remove("hidden");
-    }
+        // @AR2, start
+        //employeeTable.classList.remove("hidden");
+        //machineTable.classList.add("hidden");
+        document.getElementsByClassName(employeeClassName).forEach((element, index) => {
+            element.classList.remove("hidden");
+        });
 
-    populateDropdownOptions(); // Update dropdown options whenever table selection changes
+        document.getElementsByClassName(machineClassName).forEach((element, index) => {
+            element.classList.add("hidden");
+        });
+        // @AR2, end
+    } else if (selectedTable === "machine") {
+        // @AR2, start
+        //employeeTable.classList.add("hidden");
+        //machineTable.classList.remove("hidden");
+        document.getElementsByClassName(employeeClassName).forEach((element, index) => {
+            element.classList.add("hidden");
+        });
+
+        document.getElementsByClassName(machineClassName).forEach((element, index) => {
+            element.classList.remove("hidden");
+        });
+        // @AR2, end
+    }
+    // @AR2, start
+    else {
+        document.getElementsByClassName(employeeClassName).forEach((element, index) => {
+            element.classList.add("hidden");
+        });
+
+        document.getElementsByClassName(machineClassName).forEach((element, index) => {
+            element.classList.add("hidden");
+        });
+    }
+    // @AR2, end
+
+    // @AR2, start
+    //populateDropdownOptions(); // Update dropdown options whenever table selection changes
+    cancelEdit();
+    cancelAddRow();
+    // @AR2, end
 }
 
 // Show the Add Row form
@@ -253,43 +301,81 @@ function showAddRowForm() {
 // Function to add a new row to the currently displayed table
 // Function to add a new row to the currently displayed table
 function addRow() {
-    const personMachine = document.getElementById("newPersonMachine").value;
+    // @AR2, start
+    //const personMachine = document.getElementById("newPersonMachine").value;
+    const selectedTable = document.getElementById("dataSelector").value;
+    var employeeMachineId, employeeMachineName;
+    const employeeMachineItem = {};
+
+    if (selectedTable === "employee") {
+        employeeMachineId = $("#newEmployee").val();
+        employeeMachineName = $("#newEmployee").children("option").filter(":selected").text();
+    }
+    else if (selectedTable === "machine") {
+        employeeMachineId = $("#newMachine").val();
+        employeeMachineName = $("#newMachine").children("option").filter(":selected").text();
+    }
+    // @AR2, end
     const date = document.getElementById("newDate").value;
     const task = document.getElementById("newTask").value;
 
-    if (personMachine === "" || date === "" || task === "") {
+    // @AR2, start
+    //if (personMachine === "" || date === "" || task === "") {
+    if (employeeMachineId === "" || employeeMachineName === "" || date === "" || task === "") {
+    // @AR2, end
         alert("Please fill out all fields.");
         return;
     }
 
-    const selectedTable = document.getElementById("dataSelector").value;
-    const projectId = document.getElementById("projectDropdown").value;
-    const selectedProject = projects.find((project) => project.id == projectId);
+    // @AR2, start
+    //const selectedTable = document.getElementById("dataSelector").value;
+    //const projectId = document.getElementById("projectDropdown").value;
+    //const selectedProject = projects.find((project) => project.id == projectId);
+    employeeMachineItem.id = parseInt(employeeMachineId);
+    employeeMachineItem.name = employeeMachineName;
+    employeeMachineItem.pivot = {};
+    employeeMachineItem.pivot.id = 0; // key column (id) in the pivot table | 0 = new
+    employeeMachineItem.pivot.date = date;
+    employeeMachineItem.pivot.task = task;
+    // @AR2, end
 
-    if (selectedProject) {
+    // @AR2, start
+    //if (selectedProject) {
+    if (selectedProject_workforce_machine != null) {
+    // @AR2, end
         // Determine which table is being added to and maintain separate structures for employee and machine
         if (selectedTable === "employee") {
-            selectedProject.details.push({
-                person: personMachine,
-                date: date,
-                task: task,
-                machine: "", // Ensure machine field remains empty when adding to the employee table
-            });
+            // @AR2, start
+            //selectedProject.details.push({
+            //    person: personMachine,
+            //    date: date,
+            //    task: task,
+            //    machine: "", // Ensure machine field remains empty when adding to the employee table
+            //});
+            selectedProject_workforce_machine.workforces.push(employeeMachineItem);
+            // @AR2, end
         } else if (selectedTable === "machine") {
-            selectedProject.details.push({
-                person: "", // Ensure person field remains empty when adding to the machine table
-                machine: personMachine,
-                date: date,
-                task: task,
-            });
+            // @AR2, start
+            //selectedProject.details.push({
+            //    person: "", // Ensure person field remains empty when adding to the machine table
+            //    machine: personMachine,
+            //    date: date,
+            //    task: task,
+            //});
+            selectedProject_workforce_machine.machines.push(employeeMachineItem);
+            // @AR2, end
         }
 
         // Re-render the table to reflect the new row
-        showProjectDescription();
+        showProjectDescription_after();
     }
 
     // Clear the form fields and hide the form
-    document.getElementById("newPersonMachine").value = "";
+    // @AR2, start
+    //document.getElementById("newPersonMachine").value = "";
+    document.getElementById("newEmployee").value = "";
+    document.getElementById("newMachine").value = "";
+    // @AR2, end
     document.getElementById("newDate").value = "";
     document.getElementById("newTask").value = "";
     document.getElementById("addRowFormContainer").classList.add("hidden");
@@ -298,13 +384,19 @@ function addRow() {
 // Cancel adding a new row
 function cancelAddRow() {
     document.getElementById("addRowFormContainer").classList.add("hidden");
-    document.getElementById("newPersonMachine").value = "";
+    // @AR2, start
+    //document.getElementById("newPersonMachine").value = "";
+    document.getElementById("newEmployee").value = "";
+    document.getElementById("newMachine").value = "";
+    // @AR2, end
     document.getElementById("newDate").value = "";
     document.getElementById("newTask").value = "";
 }
 
 // Function to save the changes to the project array
 function saveChanges() {
+    // @AR2, start
+    /*
     const selectedProjectId = document.getElementById("projectDropdown").value;
     const selectedProject = projects.find(
         (project) => project.id == selectedProjectId
@@ -315,6 +407,79 @@ function saveChanges() {
     } else {
         alert("Please select a project first.");
     }
+    */
+    const selectedProjectId = document.getElementById("projectDropdown").value;
+
+    if (selectedProject_workforce_machine.machines.length == 0 ||
+        selectedProject_workforce_machine.workforces.length == 0) {
+        alert("There must be at least 1 employee and 1 machine data.");
+        return;
+    }
+
+    if (!selectedProjectId) {
+        alert("Please select a Project.");
+        return;
+    }
+
+    var updateSuccessCount = 0;
+    const requestBody = selectedProject_workforce_machine;
+    console.log(requestBody);
+
+    const promiseUpdateProjectWorkforces = new Promise((resolve, reject) => {
+        fetch(`/api/project/${selectedProjectId}/updateProjectWorkforces`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(requestBody),
+        }).then((response) => {
+            if (!response.ok) {
+                throw new Error("Failed to edit project workforces.");
+            }
+            return response.json();
+        }).then((data) => {
+            updateSuccessCount += 1;
+            resolve(data);
+        }).catch((error) => {
+            console.error("Error:", error);
+            alert(error);
+            reject(error);
+        });
+    });
+
+    const promiseUpdateProjectMachines = new Promise((resolve, reject) => {
+        fetch(`/api/project/${selectedProjectId}/updateProjectMachines`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(requestBody),
+        }).then((response) => {
+            if (!response.ok) {
+                throw new Error("Failed to edit project machines.");
+            }
+            return response.json();
+        }).then((data) => {
+            updateSuccessCount += 1;
+            resolve(data);
+        }).catch((error) => {
+            console.error("Error:", error);
+            alert(error);
+            reject(error);
+        });
+    });
+
+    Promise.all([promiseUpdateProjectWorkforces, promiseUpdateProjectMachines]).then((response) => {
+        console.log(response);
+
+        if (updateSuccessCount == 2) {
+            alert("Project machines successfully edited.");
+            resetSelectedProject();
+        } else {
+            // alert something else
+        }
+    })
+    // @AR2, end
 }
 
 // Function to open the edit form with the data from the selected row
@@ -326,9 +491,21 @@ function openEditForm(button, tableType, rowIndex) {
     const cells = row.getElementsByTagName("td");
 
     // Populate the edit form fields with the current row's data
-    document.getElementById("editPersonMachine").value = cells[0].innerText;
-    document.getElementById("editDate").value = cells[1].innerText;
-    document.getElementById("editTask").value = cells[2].innerText;
+    // @AR2, start
+    //document.getElementById("editPersonMachine").value = cells[0].innerText;
+    //document.getElementById("editDate").value = cells[1].innerText;
+    //document.getElementById("editTask").value = cells[2].innerText;
+    if (tableType == "employee")
+    {
+        document.getElementById("editEmployee").value = cells[0].innerText;
+    }
+    else if (tableType == "machine")
+    {
+        document.getElementById("editMachine").value = cells[0].innerText;
+    }
+    document.getElementById("editDate").value = cells[2].innerText;
+    document.getElementById("editTask").value = cells[3].innerText;
+    // @AR2, end
 
     // Show the edit form container
     document.getElementById("editFormContainer").classList.remove("hidden");
@@ -336,13 +513,29 @@ function openEditForm(button, tableType, rowIndex) {
 
 // Save the changes made in the edit form
 function saveEdit() {
-    const editPersonMachine =
-        document.getElementById("editPersonMachine").value;
+    // @AR2, start
+    //const editPersonMachine =
+    //    document.getElementById("editPersonMachine").value;
+    const selectedTable = document.getElementById("dataSelector").value;
+    var editEmployeeMachineId, editEmployeeMachineName;
+
+    if (selectedTable === "employee") {
+        editEmployeeMachineId = $("#editEmployee").val();
+        editEmployeeMachineName = $("#editEmployee").children("option").filter(":selected").text();
+    }
+    else if (selectedTable === "machine") {
+        editEmployeeMachineId = $("#editMachine").val();
+        editEmployeeMachineName = $("#editMachine").children("option").filter(":selected").text();
+    }
+    // @AR2, end
     const editDate = document.getElementById("editDate").value;
     const editTask = document.getElementById("editTask").value;
 
     // Ensure all fields have been filled
-    if (!editPersonMachine || !editDate || !editTask) {
+    // @AR2, start
+    //if (!editPersonMachine || !editDate || !editTask) {
+    if (!editEmployeeMachineId || !editEmployeeMachineName || !editDate || !editTask) {
+    // @AR2, end
         alert("Please fill out all fields before saving.");
         return;
     }
@@ -358,11 +551,19 @@ function saveEdit() {
         const cells = row.getElementsByTagName("td");
 
         // Update the row in the DOM with the new values
-        cells[0].innerText = editPersonMachine;
-        cells[1].innerText = editDate;
-        cells[2].innerText = editTask;
+        // @AR2, start
+        //cells[0].innerText = editPersonMachine;
+        //cells[1].innerText = editDate;
+        //cells[2].innerText = editTask;
+        cells[0].innerText = parseInt(editEmployeeMachineId);
+        cells[1].innerText = editEmployeeMachineName;
+        cells[2].innerText = editDate;
+        cells[3].innerText = editTask;
+        // @AR2, end
 
         // Update the data in the projects array
+        // @AR2, start
+        /*
         const projectId = document.getElementById("projectDropdown").value;
         const selectedProject = projects.find(
             (project) => project.id == projectId
@@ -381,21 +582,49 @@ function saveEdit() {
                 selectedProject.details[detailIndex].task = editTask;
             }
         }
+        */
+        const detailIndex = currentEditRow.rowIndex;
+
+        if (selectedTable === "employee") {
+            selectedProject_workforce_machine.workforces[detailIndex].id = editEmployeeMachineId;
+            selectedProject_workforce_machine.workforces[detailIndex].name = editEmployeeMachineName;
+            selectedProject_workforce_machine.workforces[detailIndex].pivot.date = editDate;
+            selectedProject_workforce_machine.workforces[detailIndex].pivot.task = editTask;
+        }
+        else if (selectedTable === "machine") {
+            selectedProject_workforce_machine.machines[detailIndex].id = editEmployeeMachineId;
+            selectedProject_workforce_machine.machines[detailIndex].name = editEmployeeMachineName;
+            selectedProject_workforce_machine.machines[detailIndex].pivot.date = editDate;
+            selectedProject_workforce_machine.machines[detailIndex].pivot.task = editTask;
+        }
+        // @AR2, end
 
         // Clear and hide the edit form
         document.getElementById("editFormContainer").classList.add("hidden");
-        document.getElementById("editPersonMachine").value = "";
+        // @AR2, start
+        //document.getElementById("editPersonMachine").value = "";
+        document.getElementById("editEmployee").value = "";
+        document.getElementById("editMachine").value = "";
+        // @AR2, end
         document.getElementById("editDate").value = "";
         document.getElementById("editTask").value = "";
 
         // Alert success
         alert("Changes have been saved successfully!");
+
+        // @AR2, start
+        console.log(selectedProject_workforce_machine);
+        // @AR2, end
     }
 }
 // Cancel editing and hide the edit form
 function cancelEdit() {
     document.getElementById("editFormContainer").classList.add("hidden");
-    document.getElementById("editPersonMachine").value = "";
+    // @AR2, start
+    //document.getElementById("editPersonMachine").value = "";
+    document.getElementById("editEmployee").value = "";
+    document.getElementById("editMachine").value = "";
+    // @AR2, end
     document.getElementById("editDate").value = "";
     document.getElementById("editTask").value = "";
 }
@@ -407,14 +636,40 @@ function showProjectDescription() {
 
     if (selectedValue === "") {
         document.getElementById("description").classList.add("hidden");
-        populateDropdownOptions(); // Populate with dummy data
+        // @AR2, start
+        //populateDropdownOptions(); // Populate with dummy data
+        document.getElementById("editProjectButton").classList.add("hidden");
+        // @AR2, end
         return;
     }
 
-    const selectedProject = projects.find(
-        (project) => project.id == selectedValue
-    );
+    // @AR2, start
+    //const selectedProject = projects.find(
+    //    (project) => project.id == selectedValue
+    //);
+    $.ajax({
+        url: "/api/project/workforce_machine/" + selectedValue.toString(),
+        type: 'GET',
+        success: function (data) {
+            console.log("API Response:", data); // Log the JSON data
+            selectedProject_workforce_machine = data;
+            showProjectDescription_after();
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.error(
+                "There was a problem with the ajax request:",
+                textStatus,
+                errorThrown
+            );
+            console.error("Response text:", jqXHR.responseText);
+            selectedProject_workforce_machine = null;
+            return;
+        }
+    });
+    // @AR2, end
 
+    // @AR2, start
+    /*
     if (selectedProject) {
         document.getElementById("projectTitle").innerText =
             selectedProject.name;
@@ -456,9 +711,82 @@ function showProjectDescription() {
         showSelectedTable(); // Ensure the correct table is displayed
         populateDropdownOptions(); // Populate dropdown with relevant data
     }
+    */
+    // @AR2, end
 }
 
+// @AR2, start
+function showProjectDescription_after()
+{
+    if (selectedProject_workforce_machine != null) {
+        document.getElementById("editProjectButton").classList.remove("hidden");
+
+        document.getElementById("projectTitle").innerText = "Project: " + selectedProject_workforce_machine.name;
+        document.getElementById("projectDetails").innerText = "(kolom Description belum ada di tabel Projects)";
+        document.getElementById("employeeTableBody").innerHTML = "";
+        document.getElementById("machineTableBody").innerHTML = "";
+
+        var machineRow = "";
+        var employeeRow = "";
+        
+        if (selectedProject_workforce_machine.machines.length > 0)
+        {
+            selectedProject_workforce_machine.machines.forEach((machine, index) => {
+                machineRow = document.createElement("tr");
+                machineRow.innerHTML = `
+                    <td>${machine.id}</td>
+                    <td>${machine.name}</td>
+                    <td>${machine.pivot.date}</td>
+                    <td>${machine.pivot.task}</td>
+                    <td><button class="btn btn-sm btn-primary" onclick="openEditForm(this, 'machine', ${index})">Edit</button></td>
+                `;
+                document.getElementById("machineTableBody").appendChild(machineRow);
+            });
+        }
+        else
+        {
+            machineRow = document.createElement("tr");
+            machineRow.innerHTML = '<td colspan="4">(No Data)</td>';
+            document.getElementById("machineTableBody").appendChild(machineRow);
+        }
+
+        if (selectedProject_workforce_machine.workforces.length > 0)
+        {
+            selectedProject_workforce_machine.workforces.forEach((workforce, index) => {
+                employeeRow = document.createElement("tr");
+                employeeRow.innerHTML = `
+                    <td>${workforce.id}</td>
+                    <td>${workforce.name}</td>
+                    <td>${workforce.pivot.date}</td>
+                    <td>${workforce.pivot.task}</td>
+                    <td><button class="btn btn-sm btn-primary" onclick="openEditForm(this, 'employee', ${index})">Edit</button></td>
+                `;
+                document.getElementById("employeeTableBody").appendChild(employeeRow);
+            });
+        }
+        else
+        {
+            employeeRow = document.createElement("tr");
+            employeeRow.innerHTML = '<td colspan="4">(No Data)</td>';
+            document.getElementById("employeeTableBody").appendChild(employeeRow);
+        }
+
+        document.getElementById("description").classList.remove("hidden");
+        showSelectedTable(); // Ensure the correct table is displayed
+    }
+}
+
+function resetSelectedProject()
+{
+    document.getElementById("projectDropdown").value = "";
+    selectedProject_workforce_machine = null;
+    showProjectDescription();
+}
+// @AR2, end
+
 // Function to populate dropdown options with dummy data for Person/Machine based on selected table
+// @AR2, start
+/*
 function populateDropdownOptions() {
     const selectedTable = document.getElementById("dataSelector").value; // Get the selected table type
     const newPersonMachineSelect = document.getElementById("newPersonMachine");
@@ -506,3 +834,5 @@ function populateDropdownOptions() {
         });
     }
 }
+*/
+// @AR2, end

@@ -8,6 +8,12 @@ use App\Models\Product;
 use App\Models\Size;
 use App\Models\Color;
 use App\Models\ProjectStatus;
+// @AR2, start
+use App\Models\Machine;
+use App\Models\ProjectMachine;
+use App\Models\ProjectWorkforce;
+use App\Models\Workforce;
+// @AR2, end
 
 
 class ProjectController extends Controller
@@ -116,6 +122,22 @@ class ProjectController extends Controller
 
         return response()->json($projectData);
     }
+
+    // @AR2, start
+    /**
+     * Returns a list of Machines and Workforces of a single Project.
+     */
+    public function showWorkforces_Machines(string $id)
+    {
+        $projectWorkforceMachineData = Project::with('machines', 'workforces')->find((int)$id);
+
+        if (!$projectWorkforceMachineData) {
+            return null;
+        }
+        
+        return response()->json($projectWorkforceMachineData);
+    }
+    // @AR2, end
 
     /**
      * Show the form for editing the specified resource.
@@ -282,5 +304,229 @@ class ProjectController extends Controller
 
         return response()->json(['message' => 'Project products created successfully']);
     }
+
+    // @AR2, start
+    // pindahin ke ProjectMachineController?
+    public function updateProjectMachines(Request $request, $id)
+    {
+        // Validate the request data
+        $request->validate([
+            'id' => 'required|exists:projects,id', // Ensure projectId exists in projects table
+            'machines' => 'required|array', // Ensure machines is an array
+            'machines.*.id' => 'required|exists:machines,id', // Ensure machineId exists in machines table
+            'machines.*.pivot.date' => 'required|date', // Ensure pivot.date is a date
+            'machines.*.pivot.id' => 'required|integer|min:0', // Ensure pivot.id is a non-negative integer | 0 = new data
+            'machines.*.pivot.task' => 'required|string', // Ensure pivot.task is a string
+        ]);
+        
+        $machines = $request->machines;
+        $project = Project::find($id);
+        $now = date("Y-m-d H:i:s");
+
+        // Retrieve all projectMachines of the specificed project_id
+        $projectMachines = ProjectMachine::where('project_id', $id);
+
+        // Get the existing projectMachines for the project
+        $existingProjectMachines = $projectMachines->pluck('id')->toArray();
+
+        // Stores the requested projectMachines ids
+        $requestedProjectMachines = [];
+
+        // Determine which projectMachines to attach, detach, and update
+        $projectMachinesToAttach = [];
+        $projectMachinesToDetach = [];
+        $projectMachinesToUpdate = [];
+        
+        $tmpMachine;
+        
+        foreach ($machines as $machine) {
+            if ($machine['pivot']['id'] == 0) {
+                // New data
+                $tmpMachine = [
+                    'machine_id' => $machine['id'],
+                    'date' => $machine['pivot']['date'],
+                    'task' => $machine['pivot']['task'],
+                    'created_at' => $now,
+                    'updated_at' => $now,
+                ];
+
+                array_push($projectMachinesToAttach, $tmpMachine);
+            } else if (in_array($machine['pivot']['id'], $existingProjectMachines)) {
+                // projectMachines exists, update data
+                $tmpMachine = [
+                    'id' => $machine['pivot']['id'], //Id in projectMachine
+                    //'project_id' => $request['id'],
+                    'machine_id' => $machine['id'],
+                    'date' => $machine['pivot']['date'],
+                    'task' => $machine['pivot']['task'],
+                    'updated_at' => $now,
+                ];
+
+                array_push($projectMachinesToUpdate, $tmpMachine);
+                array_push($requestedProjectMachines, $machine['pivot']['id']); // for detachment below
+            }
+
+            $tmpMachine = null;
+        }
+        
+        // Attach new projectMachines
+        if (!empty($projectMachinesToAttach)) {
+            foreach ($projectMachinesToAttach as $projectMachine) {
+                $project->machines()->attach($id, $projectMachine);
+            }
+        }
+        
+        $tmpProjectMachine; // for detachment and update
+
+        // Detach machines not present in the request
+
+        // Find projectMachines to detach (existing projectMachines not present in the request)
+        $projectMachinesToDetach = array_diff($existingProjectMachines, $requestedProjectMachines);
+
+        if (!empty($projectMachinesToDetach)) {
+            foreach ($projectMachinesToDetach as $projectMachineId) {
+                //$project->machines()->detach($projectMachineId);
+                $tmpProjectMachine = ProjectMachine::find($projectMachineId);
+                $tmpProjectMachine->delete();
+                $tmpProjectMachine = null;
+            }
+        }
+
+        // Update existing projectMachines
+        if (!empty($projectMachinesToUpdate)) {
+            foreach ($projectMachinesToUpdate as $projectMachine) {
+                $tmpProjectMachine = ProjectMachine::find($projectMachine['id']);
+                $tmpProjectMachine->machine_id = $projectMachine['machine_id'];
+                $tmpProjectMachine->date = $projectMachine['date'];
+                $tmpProjectMachine->task = $projectMachine['task'];
+                $tmpProjectMachine->updated_at = $now;
+                
+                $tmpProjectMachine->save();
+                $tmpProjectMachine = null;
+            }
+        }
+
+        return response()->json(['message' => 'Project machines edited successfully']);
+
+        // TESTING
+        /*
+        $tmpProjectMachine = ProjectMachine::find(1);
+        $tmpProjectMachine->task = "DEBUG HERE";
+        $tmpProjectMachine->save(); // check 'task' column in the database
+        return;
+        */
+    }
+
+    // pindahin ke ProjectWorkforceController?
+    public function updateProjectWorkforces(Request $request, $id)
+    {
+        // Validate the request data
+        $request->validate([
+            'id' => 'required|exists:projects,id', // Ensure projectId exists in projects table
+            'workforces' => 'required|array', // Ensure workforces is an array
+            'workforces.*.id' => 'required|exists:workforces,id', // Ensure workforceId exists in workforces table
+            'workforces.*.pivot.date' => 'required|date', // Ensure pivot.date is a date
+            'workforces.*.pivot.id' => 'required|integer|min:0', // Ensure pivot.id is a non-negative integer | 0 = new data
+            'workforces.*.pivot.task' => 'required|string', // Ensure pivot.task is a string
+        ]);
+        
+        $workforces = $request->workforces;
+        $project = Project::find($id);
+        $now = date("Y-m-d H:i:s");
+
+        // Retrieve all projectWorkforces of the specificed project_id
+        $projectWorkforces = ProjectWorkforce::where('project_id', $id);
+
+        // Get the existing projectWorkforces for the project
+        $existingProjectWorkforces = $projectWorkforces->pluck('id')->toArray();
+
+        // Stores the requested projectWorkforces ids
+        $requestedProjectWorkforces = [];
+
+        // Determine which projectWorkforces to attach, detach, and update
+        $projectWorkforcesToAttach = [];
+        $projectWorkforcesToDetach = [];
+        $projectWorkforcesToUpdate = [];
+        
+        $tmpWorkforce;
+        
+        foreach ($workforces as $workforce) {
+            if ($workforce['pivot']['id'] == 0) {
+                // New data
+                $tmpWorkforce = [
+                    'workforce_id' => $workforce['id'],
+                    'date' => $workforce['pivot']['date'],
+                    'task' => $workforce['pivot']['task'],
+                    'created_at' => $now,
+                    'updated_at' => $now,
+                ];
+
+                array_push($projectWorkforcesToAttach, $tmpWorkforce);
+            } else if (in_array($workforce['pivot']['id'], $existingProjectWorkforces)) {
+                // projectWorkforces exists, update data
+                $tmpWorkforce = [
+                    'id' => $workforce['pivot']['id'], //Id in projectWorkforce
+                    //'project_id' => $request['id'],
+                    'workforce_id' => $workforce['id'],
+                    'date' => $workforce['pivot']['date'],
+                    'task' => $workforce['pivot']['task'],
+                    'updated_at' => $now,
+                ];
+
+                array_push($projectWorkforcesToUpdate, $tmpWorkforce);
+                array_push($requestedProjectWorkforces, $workforce['pivot']['id']); // for detachment below
+            }
+
+            $tmpWorkforce = null;
+        }
+        
+        // Attach new projectWorkforces
+        if (!empty($projectWorkforcesToAttach)) {
+            foreach ($projectWorkforcesToAttach as $projectWorkforce) {
+                $project->workforces()->attach($id, $projectWorkforce);
+            }
+        }
+        
+        $tmpProjectWorkforce; // for detachment and update
+
+        // Detach workforces not present in the request
+
+        // Find projectWorkforces to detach (existing projectWorkforces not present in the request)
+        $projectWorkforcesToDetach = array_diff($existingProjectWorkforces, $requestedProjectWorkforces);
+
+        if (!empty($projectWorkforcesToDetach)) {
+            foreach ($projectWorkforcesToDetach as $projectWorkforceId) {
+                //$project->workforces()->detach($projectWorkforceId);
+                $tmpProjectWorkforce = ProjectWorkforce::find($projectWorkforceId);
+                $tmpProjectWorkforce->delete();
+                $tmpProjectWorkforce = null;
+            }
+        }
+
+        // Update existing projectWorkforces
+        if (!empty($projectWorkforcesToUpdate)) {
+            foreach ($projectWorkforcesToUpdate as $projectWorkforce) {
+                $tmpProjectWorkforce = ProjectWorkforce::find($projectWorkforce['id']);
+                $tmpProjectWorkforce->workforce_id = $projectWorkforce['workforce_id'];
+                $tmpProjectWorkforce->date = $projectWorkforce['date'];
+                $tmpProjectWorkforce->task = $projectWorkforce['task'];
+                $tmpProjectWorkforce->updated_at = $now;
+                
+                $tmpProjectWorkforce->save();
+                $tmpProjectWorkforce = null;
+            }
+        }
+
+        return response()->json(['message' => 'Project workforces edited successfully']);
+
+        // TESTING
+        /*
+        $tmpProjectWorkforce = ProjectWorkforce::find(1);
+        $tmpProjectWorkforce->task = "DEBUG HERE";
+        $tmpProjectWorkforce->save(); // check 'task' column in the database
+        return;
+        */
+    }
+    // @AR2, end
 
 }

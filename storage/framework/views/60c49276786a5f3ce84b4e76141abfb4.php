@@ -1,6 +1,6 @@
-@extends('layouts/main')
 
-@section('container')
+
+<?php $__env->startSection('container'); ?>
 <style>
   .hidden {
     display: none;
@@ -56,9 +56,9 @@
                                     <label for="projectDropdown" class="form-label">Ongoing Project</label>
                                     <select class="form-select" placeholder="-- Select a Project --" id="projectDropdown" onchange="showProjectDescription()">
                                         <option value="" selected hidden>-- Select a Project --</option>
-                                        @foreach($projects as $project)
-                                            <option value="{{ $project->id }}">{{ $project->name }}</option>
-                                        @endforeach
+                                        <?php $__currentLoopData = $projects; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $project): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <option value="<?php echo e($project->id); ?>"><?php echo e($project->name); ?></option>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     </select>
                                     <!-- @AR2, end -->
                                 </div>
@@ -117,17 +117,17 @@
                                                     <!-- Employee -->
                                                     <label for="editEmployee" class="form-label employeeOnly">Person</label>
                                                     <select class="form-select employeeOnly" id="editEmployee">
-                                                        @foreach($workforces as $workforce)
-                                                            <option value="{{ $workforce->id }}">{{ $workforce->name }}</option>
-                                                        @endforeach
+                                                        <?php $__currentLoopData = $workforces; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $workforce): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                            <option value="<?php echo e($workforce->id); ?>"><?php echo e($workforce->name); ?></option>
+                                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                     </select>
 
                                                     <!-- Machine -->
                                                     <label for="editMachine" class="form-label machineOnly">Machine</label>
                                                     <select class="form-select machineOnly" id="editMachine">
-                                                        @foreach($machines as $machine)
-                                                            <option value="{{ $machine->id }}">{{ $machine->name }}</option>
-                                                        @endforeach
+                                                        <?php $__currentLoopData = $machines; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $machine): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                            <option value="<?php echo e($machine->id); ?>"><?php echo e($machine->name); ?></option>
+                                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                     </select>
                                                 </div>
                                                 <div class="mb-3">
@@ -152,17 +152,17 @@
                                                     <!-- Employee -->
                                                     <label for="newEmployee" class="form-label employeeOnly">Person</label>
                                                     <select class="form-select employeeOnly" id="newEmployee">
-                                                        @foreach($workforces as $workforce)
-                                                            <option value="{{ $workforce->id }}">{{ $workforce->name }}</option>
-                                                        @endforeach
+                                                        <?php $__currentLoopData = $workforces; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $workforce): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                            <option value="<?php echo e($workforce->id); ?>"><?php echo e($workforce->name); ?></option>
+                                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                     </select>
 
                                                     <!-- Machine -->
                                                     <label for="newMachine" class="form-label machineOnly">Machine</label>
                                                     <select class="form-select machineOnly" id="newMachine">
-                                                        @foreach($machines as $machine)
-                                                            <option value="{{ $machine->id }}">{{ $machine->name }}</option>
-                                                        @endforeach
+                                                        <?php $__currentLoopData = $machines; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $machine): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                            <option value="<?php echo e($machine->id); ?>"><?php echo e($machine->name); ?></option>
+                                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                     </select>
                                                 </div>
                                                 <div class="mb-3">
@@ -213,46 +213,7 @@
     </section>
 
     <!-- Modal -->
-    {{-- <div class="modal fade" id="addEventModal" tabindex="-1" role="dialog" aria-labelledby="addEventModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="addEventModalLabel">Add New Event</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form id="addEventForm">
-                        <div class="form-group">
-                            <label for="eventTitle">Event Title</label>
-                            <input type="text" class="form-control" id="eventTitle" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="eventStart">Start Date</label>
-                            <input type="text" class="form-control datepicker" id="eventStart" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="eventEnd">End Date</label>
-                            <input type="text" class="form-control datepicker" id="eventEnd">
-                        </div>
-                        <div class="form-group">
-                            <label for="eventColor">Event Color</label>
-                            <input type="color" class="form-control" id="eventColor" value="#ff9f89">
-                        </div>
-                        <div class="form-group">
-                            <label for="eventTextColor">Text Color</label>
-                            <input type="color" class="form-control" id="eventTextColor" value="#000000">
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" onclick="revertModal()" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="saveEventButton">Save Event</button>
-                </div>
-            </div>
-        </div>
-    </div> --}}
+    
 </div>
 
 
@@ -260,5 +221,7 @@
 
 
 
-@endsection
+<?php $__env->stopSection(); ?>
 
+
+<?php echo $__env->make('layouts/main', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\Users\RYZEN\OneDrive\Documents\ta\TA-2 @AR2 20241016\resources\views/schedule.blade.php ENDPATH**/ ?>

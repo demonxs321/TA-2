@@ -10,15 +10,25 @@ class Project extends Model
     use HasFactory;
 
     // Relationship with employees (Many-to-Many)
-    public function employees()
+    // @AR2, start
+    //public function employees()
+    //{
+    //    return $this->belongsToMany(Employee::class, 'employee_project')->withPivot('Description');
+    //}
+    // Relationship with workforces (Many-to-Many)
+    public function workforces()
     {
-        return $this->belongsToMany(Employee::class, 'employee_project')->withPivot('Description');
+        return $this->belongsToMany(Workforce::class, 'project_workforces')->withPivot('id', 'date', 'task');
     }
+    // @AR2, end
 
     // Relationship with machines (Many-to-Many)
     public function machines()
     {
-        return $this->belongsToMany(Machine::class, 'machine_project')->withPivot('Description');
+        // @AR2, start
+        //return $this->belongsToMany(Machine::class, 'machine_project')->withPivot('Description');
+        return $this->belongsToMany(Machine::class, 'project_machines')->withPivot('id', 'date', 'task');
+        // @AR2, end
     }
 
     // Current relationship with products (Many-to-Many)
