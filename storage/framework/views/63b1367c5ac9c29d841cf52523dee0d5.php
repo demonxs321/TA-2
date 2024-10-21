@@ -24,12 +24,18 @@
                     <thead>
                         <tr>
                             <th scope="col">ID</th>
+                            <!-- @AR2, start -->
+                            <th scope="col">Project</th>
+                            <!-- @AR2, end -->
                             <th scope="col">Machine</th>
                             <th scope="col">Date</th>
                             <th scope="col">Task</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <!-- @AR2, start -->
+                    <!-- <tbody> -->
+                    <tbody id="machine-utility-table-body">
+                    <!-- @AR2, end -->
                         <!-- Data from the database will be inserted here -->
                     </tbody>
                 </table>
@@ -42,12 +48,18 @@
                     <thead>
                         <tr>
                             <th scope="col">ID</th>
+                            <!-- @AR2, start -->
+                            <th scope="col">Project</th>
+                            <!-- @AR2, end -->
                             <th scope="col">Name</th>
                             <th scope="col">Date</th>
                             <th scope="col">Task</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <!-- @AR2, start -->
+                    <!-- <tbody> -->
+                    <tbody id="employee-utility-table-body">
+                    <!-- @AR2, end -->
                         <!-- Data from the database will be inserted here -->
                     </tbody>
                 </table>
@@ -88,7 +100,10 @@
         <div class="col">
             <h3>Utility Table</h3>
             <div class="container">
-                <table class="table table-responsive table-striped">
+                <!-- @AR2, start -->
+                <!-- <table class="table table-responsive table-striped"> -->
+                <table id="report-utility-table" class="table table-responsive table-striped">
+                <!-- @AR2, end -->
                     <thead>
                         <tr>
                             <th scope="col">#</th>
@@ -105,6 +120,49 @@
                 </table>
             </div>
         </div>
+    </div>
+    <br />
+    <div class="row row-cols-4 row-cols-md-2 g-3">
+        <div class="col">
+            <h3>Employee Report</h3>
+        <div class="form-group">
+            <label for="month">Pilih Bulan</label>
+            <select id="month" name="month" class="form-control">
+                <option value="1">Januari</option>
+                <option value="2">Februari</option>
+                <option value="3">Maret</option>
+                <option value="4">April</option>
+                <option value="5">Mei</option>
+                <option value="6">Juni</option>
+                <option value="7">Juli</option>
+                <option value="8">Agustus</option>
+                <option value="9">September</option>
+                <option value="10">Oktober</option>
+                <option value="11">November</option>
+                <option value="12">Desember</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary mt-2">Lihat Laporan</button>
+    </form>
+
+    <div class="table-responsive mt-5">
+        <table class="table table-striped text-center">
+            <thead>
+                <tr>
+                    <th>Nama</th>
+                    <th>Jumlah Bekerja Selama Bulan</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php $__currentLoopData = $workReport; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $report): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <tr>
+                    <td><?php echo e($report->name); ?></td>
+                    <td><?php echo e($report->work_count); ?></td>
+                </tr>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+            </tbody>
+        </table>
+    </div>
     </div>
 
     <script src="/js/utilityScript.js"></script>

@@ -121,6 +121,50 @@
             </div>
         </div>
     </div>
+    <br />
+    <div class="row row-cols-4 row-cols-md-2 g-3">
+        <div class="col">
+            <h3>Employee Report</h3>
+            <form method="GET" action="{{ route('monthlyWorkReport') }}">
+        <div class="form-group">
+            <label for="month">Pilih Bulan</label>
+            <select id="month" name="month" class="form-control">
+                <option value="1">Januari</option>
+                <option value="2">Februari</option>
+                <option value="3">Maret</option>
+                <option value="4">April</option>
+                <option value="5">Mei</option>
+                <option value="6">Juni</option>
+                <option value="7">Juli</option>
+                <option value="8">Agustus</option>
+                <option value="9">September</option>
+                <option value="10">Oktober</option>
+                <option value="11">November</option>
+                <option value="12">Desember</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary mt-2">Lihat Laporan</button>
+    </form>
+
+    <div class="table-responsive mt-5">
+        <table class="table table-striped text-center">
+            <thead>
+                <tr>
+                    <th>Nama</th>
+                    <th>Jumlah Bekerja Selama Bulan</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($workReport as $report)
+                <tr>
+                    <td>{{ $report->name }}</td>
+                    <td>{{ $report->work_count }}</td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+    </div>
 
     <script src="/js/utilityScript.js"></script>
     <!-- @Utility, end -->
