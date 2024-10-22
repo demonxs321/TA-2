@@ -138,6 +138,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/projectWorkforce', [ProjectWorkforceController::class, 'index']);
     // @AR2, end
 
+    Route::get('/utility', [ReportController::class, 'showUtilityPage'])->name('utility');
+
+    Route::get('/monthly-work-report', [ReportController::class, 'monthlyWorkReport'])->name('monthlyWorkReport');
+
     Route::get('/cash', function () {
         return view('cash', [
             'title' => 'Cash Page'
@@ -150,11 +154,7 @@ Route::middleware('auth')->group(function () {
         ]);
     });
 
-    Route::get('/utility', function () {
-        return view('utility', [
-            'title' => 'Utility Page'
-        ]);
-    });
+
 
     Route::post('/logout', function () {
         auth()->logout();
