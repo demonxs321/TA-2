@@ -24,18 +24,13 @@
                     <thead>
                         <tr>
                             <th scope="col">ID</th>
-                            <!-- @AR2, start -->
                             <th scope="col">Project</th>
-                            <!-- @AR2, end -->
                             <th scope="col">Machine</th>
                             <th scope="col">Date</th>
                             <th scope="col">Task</th>
                         </tr>
                     </thead>
-                    <!-- @AR2, start -->
-                    <!-- <tbody> -->
                     <tbody id="machine-utility-table-body">
-                    <!-- @AR2, end -->
                         <!-- Data from the database will be inserted here -->
                     </tbody>
                 </table>
@@ -44,23 +39,34 @@
         <div class="col">
             <h3>Employee</h3>
             <div class="container">
-                <table id="employee-utility-table"  class="table table-responsive table-striped">
+                <table id="employee-utility-table" class="table table-responsive table-striped">
                     <thead>
                         <tr>
                             <th scope="col">ID</th>
-                            <!-- @AR2, start -->
                             <th scope="col">Project</th>
-                            <!-- @AR2, end -->
                             <th scope="col">Name</th>
                             <th scope="col">Date</th>
                             <th scope="col">Task</th>
                         </tr>
                     </thead>
-                    <!-- @AR2, start -->
-                    <!-- <tbody> -->
                     <tbody id="employee-utility-table-body">
-                    <!-- @AR2, end -->
-                        <!-- Data from the database will be inserted here -->
+                        <!-- Data from the workforce database will be inserted here -->
+                        <?php if(isset($workReport) && $workReport->isNotEmpty()): ?>
+                            <?php $__currentLoopData = $workReport; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $report): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <tr>
+                                <!-- Check if workforce relationship exists before accessing its properties -->
+                                <td><?php echo e($report->workforce ? $report->workforce->id : 'No ID'); ?></td>
+                                <td><?php echo e($report->project_id); ?></td>
+                                <td><?php echo e($report->workforce ? $report->workforce->name : 'No Name'); ?></td>
+                                <td><?php echo e($report->date); ?></td>
+                                <td><?php echo e($report->task); ?></td>
+                            </tr>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        <?php else: ?>
+                            <tr>
+                                <td colspan="5">No workforce data available for the selected month.</td>
+                            </tr>
+                        <?php endif; ?>
                     </tbody>
                 </table>
             </div>
@@ -100,10 +106,7 @@
         <div class="col">
             <h3>Utility Table</h3>
             <div class="container">
-                <!-- @AR2, start -->
-                <!-- <table class="table table-responsive table-striped"> -->
                 <table id="report-utility-table" class="table table-responsive table-striped">
-                <!-- @AR2, end -->
                     <thead>
                         <tr>
                             <th scope="col">#</th>
@@ -125,44 +128,51 @@
     <div class="row row-cols-4 row-cols-md-2 g-3">
         <div class="col">
             <h3>Employee Report</h3>
-        <div class="form-group">
-            <label for="month">Pilih Bulan</label>
-            <select id="month" name="month" class="form-control">
-                <option value="1">Januari</option>
-                <option value="2">Februari</option>
-                <option value="3">Maret</option>
-                <option value="4">April</option>
-                <option value="5">Mei</option>
-                <option value="6">Juni</option>
-                <option value="7">Juli</option>
-                <option value="8">Agustus</option>
-                <option value="9">September</option>
-                <option value="10">Oktober</option>
-                <option value="11">November</option>
-                <option value="12">Desember</option>
-            </select>
-        </div>
-        <button type="submit" class="btn btn-primary mt-2">Lihat Laporan</button>
-    </form>
+            <form method="GET" action="<?php echo e(route('utility')); ?>">
+                <div class="form-group">
+                    <label for="month">Pilih Bulan</label>
+                    <select id="month" name="month" class="form-control">
+                        <option value="1">Januari</option>
+                        <option value="2">Februari</option>
+                        <option value="3">Maret</option>
+                        <option value="4">April</option>
+                        <option value="5">Mei</option>
+                        <option value="6">Juni</option>
+                        <option value="7">Juli</option>
+                        <option value="8">Agustus</option>
+                        <option value="9">September</option>
+                        <option value="10">Oktober</option>
+                        <option value="11">November</option>
+                        <option value="12">Desember</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary mt-2">Lihat Laporan</button>
+            </form>
 
-    <div class="table-responsive mt-5">
-        <table class="table table-striped text-center">
-            <thead>
-                <tr>
-                    <th>Nama</th>
-                    <th>Jumlah Bekerja Selama Bulan</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php $__currentLoopData = $workReport; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $report): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                <tr>
-                    <td><?php echo e($report->name); ?></td>
-                    <td><?php echo e($report->work_count); ?></td>
-                </tr>
-                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-            </tbody>
-        </table>
-    </div>
+            <!-- Ensure the $workReport variable is defined before using it -->
+            <?php if(isset($workReport) && $workReport->isNotEmpty()): ?>
+            <div class="table-responsive mt-5">
+                <table class="table table-striped text-center">
+                    <thead>
+                        <tr>
+                            <th>Nama</th>
+                            <th>Jumlah Bekerja Selama Bulan</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php $__currentLoopData = $workReport; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $report): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <tr>
+                            <td><?php echo e($report->workforce ? $report->workforce->name : 'No Name'); ?></td>
+                            <td><?php echo e($report->work_count); ?></td>
+                        </tr>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    </tbody>
+                </table>
+            </div>
+            <?php else: ?>
+                <p>No reports available for the selected month.</p>
+            <?php endif; ?>
+        </div>
     </div>
 
     <script src="/js/utilityScript.js"></script>
