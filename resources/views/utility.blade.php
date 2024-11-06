@@ -17,6 +17,7 @@
 
     <!-- @Utility, start -->
     <div class="row row-cols-2 row-cols-md-2 g-3">
+        <!-- Machine Table -->
         <div class="col">
             <h3>Machine</h3>
             <div class="container">
@@ -36,6 +37,8 @@
                 </table>
             </div>
         </div>
+        
+        <!-- Employee Table -->
         <div class="col">
             <h3>Employee</h3>
             <div class="container">
@@ -50,29 +53,15 @@
                         </tr>
                     </thead>
                     <tbody id="employee-utility-table-body">
-                        <!-- Data from the workforce database will be inserted here -->
-                        @if(isset($workReport) && $workReport->isNotEmpty())
-                            @foreach($workReport as $report)
-                            <tr>
-                                <!-- Check if workforce relationship exists before accessing its properties -->
-                                <td>{{ $report->workforce ? $report->workforce->id : 'No ID' }}</td>
-                                <td>{{ $report->project_id }}</td>
-                                <td>{{ $report->workforce ? $report->workforce->name : 'No Name' }}</td>
-                                <td>{{ $report->date }}</td>
-                                <td>{{ $report->task }}</td>
-                            </tr>
-                            @endforeach
-                        @else
-                            <tr>
-                                <td colspan="5">No workforce data available for the selected month.</td>
-                            </tr>
-                        @endif
+                        <!-- Data from the database will be inserted here -->
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
+
     <br />
+    <!-- Report Table -->
     <div class="row row-cols-3 row-cols-md-2 g-3">
         <div class="col">
             <h3>Report</h3>
@@ -103,6 +92,8 @@
                 </form>
             </div>
         </div>
+        
+        <!-- Utility Table -->
         <div class="col">
             <h3>Utility Table</h3>
             <div class="container">
@@ -118,38 +109,106 @@
                         </tr>
                     </thead>
                     <tbody id="reportTableBody">
-                        <!-- Data dari AJAX akan dimasukkan di sini -->
+                        <!-- Data from AJAX will be inserted here -->
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
+
     <br />
-    <div class="row row-cols-4 row-cols-md-2 g-3">
+    <!-- New Section for Employee and Machine Reports -->
+    <div class="row row-cols-2 row-cols-md-2 g-3">
+        <!-- Machine Report -->
         <div class="col">
-            <h3>Employee Report</h3>
+            <h3>Machine Report</h3>
+
+            <!-- Form to select year and month for machine report -->
             <form method="GET" action="{{ route('utility') }}">
                 <div class="form-group">
-                    <label for="month">Pilih Bulan</label>
-                    <select id="month" name="month" class="form-control">
-                        <option value="1">Januari</option>
-                        <option value="2">Februari</option>
-                        <option value="3">Maret</option>
-                        <option value="4">April</option>
-                        <option value="5">Mei</option>
-                        <option value="6">Juni</option>
-                        <option value="7">Juli</option>
-                        <option value="8">Agustus</option>
-                        <option value="9">September</option>
-                        <option value="10">Oktober</option>
-                        <option value="11">November</option>
-                        <option value="12">Desember</option>
+                    <label for="year_machine">Pilih Tahun</label>
+                    <select id="year_machine" name="year_machine" class="form-control">
+                        @for ($i = 2020; $i <= date('Y'); $i++)
+                            <option value="{{ $i }}" {{ request('year_machine') == $i ? 'selected' : '' }}>{{ $i }}</option>
+                        @endfor
                     </select>
                 </div>
+
+                <div class="form-group">
+                    <label for="month_machine">Pilih Bulan</label>
+                    <select id="month_machine" name="month_machine" class="form-control">
+                        @foreach (range(1, 12) as $m)
+                            <option value="{{ $m }}" {{ request('month_machine') == $m ? 'selected' : '' }}>
+                                {{ DateTime::createFromFormat('!m', $m)->format('F') }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
                 <button type="submit" class="btn btn-primary mt-2">Lihat Laporan</button>
             </form>
 
-            <!-- Ensure the $workReport variable is defined before using it -->
+            <!-- Display the machine report -->
+            @if(isset($machineReport) && $machineReport->isNotEmpty())
+            <div class="table-responsive mt-5">
+                <table class="table table-striped text-center">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Project</th>
+                            <th>Machine</th>
+                            <th>Date</th>
+                            <th>Task</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($machineReport as $report)
+                        <tr>
+                            <td>{{ $report->machine ? $report->machine->id : 'No Machine ID' }}</td>
+                            <td>{{ $report->project_id }}</td>
+                            <td>{{ $report->machine ? $report->machine->name : 'No Machine Name' }}</td>
+                            <td>{{ $report->date }}</td>
+                            <td>{{ $report->task }}</td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+            @else
+                <p>No machine reports available for the selected month and year.</p>
+            @endif
+        </div>
+
+        <!-- Employee Report -->
+        <div class="col">
+            <h3>Employee Report</h3>
+
+            <!-- Form to select year and month for employee report -->
+            <form method="GET" action="{{ route('utility') }}">
+                <div class="form-group">
+                    <label for="year">Pilih Tahun</label>
+                    <select id="year" name="year" class="form-control">
+                        @for ($i = 2020; $i <= date('Y'); $i++)
+                            <option value="{{ $i }}" {{ request('year') == $i ? 'selected' : '' }}>{{ $i }}</option>
+                        @endfor
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="month">Pilih Bulan</label>
+                    <select id="month" name="month" class="form-control">
+                        @foreach (range(1, 12) as $m)
+                            <option value="{{ $m }}" {{ request('month') == $m ? 'selected' : '' }}>
+                                {{ DateTime::createFromFormat('!m', $m)->format('F') }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-primary mt-2">Lihat Laporan</button>
+            </form>
+
+            <!-- Display the employee report with work count -->
             @if(isset($workReport) && $workReport->isNotEmpty())
             <div class="table-responsive mt-5">
                 <table class="table table-striped text-center">
@@ -170,7 +229,7 @@
                 </table>
             </div>
             @else
-                <p>No reports available for the selected month.</p>
+                <p>No reports available for the selected month and year.</p>
             @endif
         </div>
     </div>
