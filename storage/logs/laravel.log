@@ -13553,6 +13553,7 @@ ORDER BY
 #57 D:\\laravel2.0\\TA-2\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\resources\\server.php(16): require_once('D:\\\\laravel2.0\\\\T...')
 #58 {main}
 "} 
+<<<<<<< Updated upstream
 [2024-11-28 06:14:28] local.ERROR: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'tugas_akhir.project_workforces' doesn't exist (Connection: mysql, SQL: select workforce_id, COUNT(*) as work_count from `project_workforces` where year(`date`) = 2024 and month(`date`) = 11 group by `workforce_id`) {"userId":1,"exception":"[object] (Illuminate\\Database\\QueryException(code: 42S02): SQLSTATE[42S02]: Base table or view not found: 1146 Table 'tugas_akhir.project_workforces' doesn't exist (Connection: mysql, SQL: select workforce_id, COUNT(*) as work_count from `project_workforces` where year(`date`) = 2024 and month(`date`) = 11 group by `workforce_id`) at C:\\Users\\yoandhika\\OneDrive\\Documents\\TA\\TA-2\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php:829)
 [stacktrace]
 #0 C:\\Users\\yoandhika\\OneDrive\\Documents\\TA\\TA-2\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(783): Illuminate\\Database\\Connection->runQueryCallback('select workforc...', Array, Object(Closure))
@@ -13674,4 +13675,30 @@ ORDER BY
 #56 C:\\Users\\yoandhika\\OneDrive\\Documents\\TA\\TA-2\\public\\index.php(51): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #57 C:\\Users\\yoandhika\\OneDrive\\Documents\\TA\\TA-2\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\resources\\server.php(16): require_once('C:\\\\Users\\\\yoandh...')
 #58 {main}
+=======
+[2024-11-16 09:33:42] local.ERROR: Class "PurchaseItemController" does not exist {"exception":"[object] (ReflectionException(code: -1): Class \"PurchaseItemController\" does not exist at D:\\laravel2.0\\TA-2\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\RouteListCommand.php:225)
+[stacktrace]
+#0 D:\\laravel2.0\\TA-2\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\RouteListCommand.php(225): ReflectionClass->__construct('PurchaseItemCon...')
+#1 D:\\laravel2.0\\TA-2\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\RouteListCommand.php(147): Illuminate\\Foundation\\Console\\RouteListCommand->isVendorRoute(Object(Illuminate\\Routing\\Route))
+#2 D:\\laravel2.0\\TA-2\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\RouteListCommand.php(116): Illuminate\\Foundation\\Console\\RouteListCommand->getRouteInformation(Object(Illuminate\\Routing\\Route))
+#3 [internal function]: Illuminate\\Foundation\\Console\\RouteListCommand->Illuminate\\Foundation\\Console\\{closure}(Object(Illuminate\\Routing\\Route), 61)
+#4 D:\\laravel2.0\\TA-2\\vendor\\laravel\\framework\\src\\Illuminate\\Collections\\Arr.php(598): array_map(Object(Closure), Array, Array)
+#5 D:\\laravel2.0\\TA-2\\vendor\\laravel\\framework\\src\\Illuminate\\Collections\\Collection.php(777): Illuminate\\Support\\Arr::map(Array, Object(Closure))
+#6 D:\\laravel2.0\\TA-2\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\RouteListCommand.php(115): Illuminate\\Support\\Collection->map(Object(Closure))
+#7 D:\\laravel2.0\\TA-2\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\RouteListCommand.php(101): Illuminate\\Foundation\\Console\\RouteListCommand->getRoutes()
+#8 D:\\laravel2.0\\TA-2\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(36): Illuminate\\Foundation\\Console\\RouteListCommand->handle()
+#9 D:\\laravel2.0\\TA-2\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php(41): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
+#10 D:\\laravel2.0\\TA-2\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))
+#11 D:\\laravel2.0\\TA-2\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(35): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
+#12 D:\\laravel2.0\\TA-2\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(662): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
+#13 D:\\laravel2.0\\TA-2\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(211): Illuminate\\Container\\Container->call(Array)
+#14 D:\\laravel2.0\\TA-2\\vendor\\symfony\\console\\Command\\Command.php(326): Illuminate\\Console\\Command->execute(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#15 D:\\laravel2.0\\TA-2\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(180): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#16 D:\\laravel2.0\\TA-2\\vendor\\symfony\\console\\Application.php(1096): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#17 D:\\laravel2.0\\TA-2\\vendor\\symfony\\console\\Application.php(324): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Foundation\\Console\\RouteListCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#18 D:\\laravel2.0\\TA-2\\vendor\\symfony\\console\\Application.php(175): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#19 D:\\laravel2.0\\TA-2\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(201): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#20 D:\\laravel2.0\\TA-2\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#21 {main}
+>>>>>>> Stashed changes
 "} 

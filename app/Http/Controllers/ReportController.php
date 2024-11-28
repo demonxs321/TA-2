@@ -69,6 +69,7 @@ class ReportController extends Controller
 
         // 4. Pass the workReport (employee), machineReport, and the original reports to the utility view
         return view('utility', [
+            'title' => 'Utility Page',
             'workReport' => $workReport,      // Employee work report
             'machineReport' => $machineReport, // Machine report
             'reports' => $reports,
