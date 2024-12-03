@@ -6,7 +6,7 @@
     <div class="top-bar">
         <div class="header-wrapper">
             <div class="header-title">
-                <h2>Utility Page</h2>
+                <h2><?php echo e($title ?? 'Utility Page'); ?></h2> <!-- Dynamically set the page title -->
             </div>
             <div class="dropdown-top"></div>
             <div class="user-info">
@@ -37,7 +37,7 @@
                 </table>
             </div>
         </div>
-        
+
         <!-- Employee Table -->
         <div class="col">
             <h3>Employee</h3>
@@ -92,7 +92,7 @@
                 </form>
             </div>
         </div>
-        
+
         <!-- Utility Table -->
         <div class="col">
             <h3>Utility Table</h3>
@@ -117,13 +117,11 @@
     </div>
 
     <br />
-    <!-- New Section for Employee and Machine Reports -->
+    <!-- Reports Section -->
     <div class="row row-cols-2 row-cols-md-2 g-3">
         <!-- Machine Report -->
         <div class="col">
             <h3>Machine Report</h3>
-
-            <!-- Form to select year and month for machine report -->
             <form method="GET" action="<?php echo e(route('utility')); ?>">
                 <div class="form-group">
                     <label for="year_machine">Pilih Tahun</label>
@@ -149,7 +147,6 @@
                 <button type="submit" class="btn btn-primary mt-2">Lihat Laporan</button>
             </form>
 
-            <!-- Display the machine report -->
             <?php if(isset($machineReport) && $machineReport->isNotEmpty()): ?>
             <div class="table-responsive mt-5">
                 <table class="table table-striped text-center">
@@ -183,8 +180,6 @@
         <!-- Employee Report -->
         <div class="col">
             <h3>Employee Report</h3>
-
-            <!-- Form to select year and month for employee report -->
             <form method="GET" action="<?php echo e(route('utility')); ?>">
                 <div class="form-group">
                     <label for="year">Pilih Tahun</label>
@@ -210,7 +205,6 @@
                 <button type="submit" class="btn btn-primary mt-2">Lihat Laporan</button>
             </form>
 
-            <!-- Display the employee report with work count -->
             <?php if(isset($workReport) && $workReport->isNotEmpty()): ?>
             <div class="table-responsive mt-5">
                 <table class="table table-striped text-center">
